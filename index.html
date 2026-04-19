@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <!-- saved from url=(0063)file:///C:/Users/zkan/Desktop/Yeni%20klas%C3%B6r/ailecebil.html -->
 <html lang="tr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -495,15 +495,9 @@ body.kids-mode .subject-btn:hover{border-color:var(--kids-pr)}
 <!-- ==================== LİDERLİK ==================== -->
 <div id="leaderPage" class="card hidden">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-    <div style="font-family:'Righteous',cursive;font-size:1.5em">🏆 Ailece Sıralama</div>
-    <div>
-      <button class="btn btn-primary btn-sm" onclick="renderOnlineLeaderboard()">🌐 Online Skorlar</button>
-      <button class="btn btn-gray btn-sm" onclick="goHome()">← Geri</button>
-    </div>
+    <div style="font-family:&#39;Righteous&#39;,cursive;font-size:1.5em">🏆 Ailece Sıralama</div>
+    <button class="btn btn-gray btn-sm" onclick="goHome()">← Geri</button>
   </div>
-  <div id="onlineLeaderboard"></div>
-  <div class="divider"></div>
-  <div class="sec-title">📊 Yerel Skorlar</div>
   <div id="leaderList"></div>
 </div>
 
@@ -1593,7 +1587,6 @@ function endQuiz(){
     <div class="stat-box bad"><div class="sv">${quizState.wrong}</div><div class="sl">❌ Yanlış</div></div>
     <div class="stat-box"><div class="sv">${quizState.timeout}</div><div class="sl">⏱️ Süre</div></div>
     <div class="stat-box"><div class="sv" style="color:var(--warn)">%${pct}</div><div class="sl">Başarı</div></div>`;
-  
   // Level up
   const lvlUpEl=document.getElementById('resLevelUp');
   if(currentUser){
@@ -1605,15 +1598,12 @@ function endQuiz(){
     if(oldLvl.name!==newLvl.name){lvlUpEl.style.display='';lvlUpEl.textContent=`🎉 Seviye atladın! ${oldLvl.icon} → ${newLvl.icon} ${newLvl.name}!`}
     else lvlUpEl.style.display='none';
   } else lvlUpEl.style.display='none';
-
-  // 🆕 SKORU GOOGLE SHEETS'E GÖNDER (BURADA OLMALI)
-  if (currentUser && quizState) {
-      const kategori = quizState.cat || "Genel";
-      skorGonder(currentUser.u, quizState.score, quizState.correct, quizState.wrong, kategori);
-  }
-
   showPage('resultPage');
 }
+
+function replayQuiz(){if(lastQuizParams)startQuiz(lastQuizParams.catKey,lastQuizParams.label)}
+function quitQuiz(){if(confirm('Quizden çıkmak istiyor musunuz?')){clearInterval(quizState?.timer);quizState=null;goHome()}}
+
 // ==================== PROFIL ====================
 function renderProfile(){
   if(!currentUser)return;
@@ -2096,92 +2086,6 @@ function showMsg(id,text,type){
 
 // ==================== BAŞLANGIÇ ====================
 initApp();
-
-
-  // ==================== GOOGLE SHEETS SKOR API ====================
-// ⚠️ KENDİ URL'NİZLE DEĞİŞTİRİN!
-const SKOR_API_URL = "https://script.google.com/macros/s/AKfycbxXK9pwtJxToBizPOKmzkb2HMbMQsYnhW9PtCKr1x9K1Qw4fIh2w441R7YL-msm1Rua/exec";
-
-// 📤 Skor gönderme fonksiyonu
-async function skorGonder(oyuncuAdi, puan, dogru, yanlis, kategori = "") {
-    try {
-        const url = `${SKOR_API_URL}?gonder=skor&oyuncu=${encodeURIComponent(oyuncuAdi)}&puan=${puan}&dogru=${dogru}&yanlis=${yanlis}&kategori=${encodeURIComponent(kategori)}`;
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log("✅ Skor gönderildi:", data);
-        return data;
-    } catch (error) {
-        console.error("❌ Skor gönderme hatası:", error);
-        return null;
-    }
-}
-
-// 📥 Tüm skorları getir
-async function skorlariGetir() {
-    try {
-        const url = `${SKOR_API_URL}?get=skorlar`;
-        const response = await fetch(url);
-        const skorlar = await response.json();
-        return skorlar;
-    } catch (error) {
-        console.error("❌ Skor getirme hatası:", error);
-        return [];
-    }
-}
-
-// 🏆 En iyi 10 skoru getir (liderlik tablosu)
-async function top10Getir() {
-    try {
-        const url = `${SKOR_API_URL}?get=top10`;
-        const response = await fetch(url);
-        const top10 = await response.json();
-        return top10;
-    } catch (error) {
-        console.error("❌ Top10 getirme hatası:", error);
-        return [];
-    }
-}
-
-// 👤 Kullanıcının en iyi skorunu getir
-async function kullaniciBestGetir(oyuncuAdi) {
-    try {
-        const url = `${SKOR_API_URL}?get=best&oyuncu=${encodeURIComponent(oyuncuAdi)}`;
-        const response = await fetch(url);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("❌ Best skor getirme hatası:", error);
-        return { bestScore: 0, bestDogru: 0, bestYanlis: 0 };
-    }
-}
-
-// 🏆 Liderlik tablosunu gösterme (HTML'e ekleyin)
-async function renderOnlineLeaderboard() {
-    const top10 = await top10Getir();
-    const container = document.getElementById("onlineLeaderboard");
-    if (!container) return;
-    
-    if (top10.length === 0) {
-        container.innerHTML = '<div class="empty"><span class="ei">🏆</span>Henüz skor yok</div>';
-        return;
-    }
-    
-    const medals = ["🥇", "🥈", "🥉"];
-    container.innerHTML = top10.map((skor, i) => `
-        <div class="lb-row">
-            <div class="lb-rank">${medals[i] || (i+1)}</div>
-            <div class="lb-name">${escapeHtml(skor.oyuncu)}</div>
-            <div class="lb-score">${skor.puan} P</div>
-            <div style="font-size:.7em;color:#94a3b8">✅${skor.dogru} ❌${skor.yanlis}</div>
-        </div>
-    `).join('');
-}
-
-// Yardımcı fonksiyon
-function escapeHtml(str) {
-    if (!str) return "";
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
 </script>
 
 </body></html>
