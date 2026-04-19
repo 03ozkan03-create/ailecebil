@@ -1,0 +1,2091 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)file:///C:/Users/zkan/Desktop/Yeni%20klas%C3%B6r/ailecebil.html -->
+<html lang="tr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏠 Ailece Bil! - Aile Bilgi Yarışması</title>
+<style>
+/* ==================== TEMEL ==================== */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap');
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --pr:#f97316;--pr2:#ea580c;--ok:#22c55e;--danger:#ef4444;--warn:#f59e0b;
+  --dark:#1e293b;--light:#fff7ed;--card-bg:rgba(255,255,255,0.99);
+  --kids-pr:#ff6b9d;--kids-s:#ffbe0b;--kids-ok:#06d6a0;
+  --adult-pr:#f97316;
+}
+
+body{
+  font-family:'Nunito',sans-serif;
+  background:linear-gradient(135deg,#ea580c 0%,#f97316 40%,#fbbf24 100%);
+  min-height:100vh;padding:14px;
+}
+
+/* Mode switch */
+body.kids-mode{background:linear-gradient(135deg,#ff6b9d 0%,#ff9f43 50%,#ffbe0b 100%)}
+body.kids-mode .card{border:3px solid #ffbe0b}
+body.kids-mode .btn-primary{background:var(--kids-pr)}
+body.kids-mode .choice-btn:hover:not(:disabled){border-color:var(--kids-pr)}
+
+.container{max-width:620px;margin:0 auto}
+.card{background:var(--card-bg);border-radius:24px;padding:22px;box-shadow:0 20px 40px rgba(0,0,0,0.3);margin-bottom:18px;animation:fadeUp .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none!important}
+
+/* ==================== KAYAN YAZI ==================== */
+.marquee-box{background:var(--dark);color:var(--warn);padding:10px;border-radius:12px;
+  margin-bottom:14px;overflow:hidden;white-space:nowrap;font-weight:800;border:1px solid var(--warn)}
+.marquee-text{display:inline-block;padding-left:100%;animation:marquee 18s linear infinite}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+
+/* ==================== BUTONLAR ==================== */
+.btn{border:none;padding:13px 18px;border-radius:14px;font-weight:800;cursor:pointer;
+  transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-family:'Nunito',sans-serif}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:var(--pr);color:white;width:100%}
+.btn-ok{background:var(--ok);color:white;width:100%}
+.btn-danger{background:var(--danger);color:white}
+.btn-warn{background:var(--warn);color:white}
+.btn-gray{background:#e2e8f0;color:var(--dark)}
+.btn-sm{padding:6px 12px;font-size:.8em;width:auto}
+.btn-full{width:100%}
+.btn-kids{background:var(--kids-pr);color:white}
+.btn-adult{background:var(--adult-pr);color:white}
+
+/* ==================== INPUT ==================== */
+.inp{width:100%;padding:12px 14px;border-radius:12px;border:2px solid #e2e8f0;
+  outline:none;font-family:'Nunito',sans-serif;font-size:.95em;font-weight:600;
+  margin-bottom:10px;transition:.2s;color:var(--dark)}
+.inp:focus{border-color:var(--pr);background:#f5f3ff}
+.select{width:100%;padding:11px 14px;border-radius:12px;border:2px solid #e2e8f0;
+  outline:none;font-family:'Nunito',sans-serif;font-size:.95em;font-weight:700;
+  margin-bottom:10px;background:white;color:var(--dark)}
+.select:focus{border-color:var(--pr)}
+label.lbl{font-size:.78em;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:5px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.row2{grid-template-columns:1fr}}
+
+/* ==================== ŞIK BUTONLARI ==================== */
+.choice-btn{
+  background:#f8fafc;border:2.5px solid #e2e8f0;padding:16px 18px;
+  border-radius:16px;font-size:1.05rem;text-align:left;width:100%;
+  margin-bottom:10px;cursor:pointer;transition:.2s;font-weight:700;
+  color:var(--dark);display:flex;align-items:center;gap:10px;
+  font-family:'Nunito',sans-serif
+}
+.choice-letter{min-width:32px;height:32px;background:#e2e8f0;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85em;flex-shrink:0}
+.choice-btn:hover:not(:disabled){border-color:var(--pr);transform:translateY(-2px);box-shadow:0 4px 12px rgba(99,102,241,.2)}
+.choice-btn.correct{background:var(--ok)!important;color:white!important;border-color:#15803d!important;transform:scale(1.02)}
+.choice-btn.correct .choice-letter{background:rgba(255,255,255,.3);color:white}
+.choice-btn.wrong{background:var(--danger)!important;color:white!important;border-color:#b91c1c!important}
+.choice-btn.wrong .choice-letter{background:rgba(255,255,255,.3);color:white}
+.choice-btn:disabled{cursor:not-allowed}
+
+/* Kids büyük şık */
+body.kids-mode .choice-btn{font-size:1.2rem;padding:20px;border-radius:20px}
+
+/* ==================== ZAMANLAYICI ==================== */
+.timer-wrap{display:flex;align-items:center;justify-content:center}
+.timer-ring{width:72px;height:72px;border:4px solid var(--danger);border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:white;box-shadow:0 4px 14px rgba(239,68,68,.2)}
+.timer-ring small{font-size:8px;font-weight:800;color:#94a3b8;text-transform:uppercase}
+.timer-ring span{font-size:26px;font-weight:900;color:var(--danger);line-height:1}
+.timer-low{animation:pulse .7s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.timer-low span{color:var(--danger)!important}
+
+/* ==================== PROGRESS ==================== */
+.prog-wrap{background:#e2e8f0;border-radius:4px;height:7px;margin-bottom:18px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--pr),#a855f7);border-radius:4px;transition:width .4s}
+
+/* ==================== MOD SEÇİCİ ==================== */
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:0}
+.mode-card{padding:28px 16px;border-radius:20px;text-align:center;cursor:pointer;
+  transition:.25s;border:3px solid transparent;font-family:'Nunito',sans-serif}
+.mode-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.mode-card .mc-icon{font-size:3.5em;display:block;margin-bottom:10px}
+.mode-card .mc-title{font-size:1.3em;font-weight:900;color:white}
+.mode-card .mc-sub{font-size:.85em;font-weight:700;color:rgba(255,255,255,.75);margin-top:5px}
+.mode-kids{background:linear-gradient(135deg,#ff6b9d,#ff9f43)}
+.mode-adult{background:linear-gradient(135deg,#f97316,#ea580c)}
+
+/* Sınıf kartları */
+.grade-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grade-btn{padding:18px 8px;border-radius:16px;text-align:center;cursor:pointer;
+  border:2.5px solid transparent;transition:.2s;font-family:'Nunito',sans-serif;font-weight:800}
+.grade-btn:hover{transform:translateY(-3px)}
+
+/* Konu kartları */
+.subject-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.subject-btn{padding:20px 12px;border-radius:16px;text-align:center;cursor:pointer;
+  border:2px solid #e2e8f0;background:#f8fafc;transition:.2s;font-family:'Nunito',sans-serif;font-weight:800;color:var(--dark)}
+.subject-btn .si{font-size:1.8em;display:block;margin-bottom:6px}
+.subject-btn:hover{border-color:var(--pr);transform:translateY(-3px);box-shadow:0 6px 16px rgba(99,102,241,.2)}
+body.kids-mode .subject-btn:hover{border-color:var(--kids-pr)}
+
+/* Büyükler kategori */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cat-btn{padding:18px 12px;border-radius:16px;text-align:center;cursor:pointer;
+  border:2px solid #e2e8f0;background:#f8fafc;transition:.2s;font-family:'Nunito',sans-serif;font-weight:800;color:var(--dark)}
+.cat-btn .ci{font-size:1.6em;display:block;margin-bottom:6px}
+.cat-btn .cc{font-size:.75em;color:#94a3b8;font-weight:700;margin-top:3px}
+.cat-btn:hover{border-color:var(--pr);transform:translateY(-3px);box-shadow:0 6px 16px rgba(99,102,241,.2)}
+
+/* ==================== MESAJ KUTUSU ==================== */
+.msg-thread{height:200px;overflow-y:auto;background:#f8fafc;border:1px solid #e2e8f0;
+  border-radius:14px;padding:12px;margin-bottom:10px}
+.msg-thread::-webkit-scrollbar{width:4px}
+.msg-thread::-webkit-scrollbar-thumb{background:var(--pr);border-radius:2px}
+.bubble{padding:9px 13px;border-radius:14px;font-size:.9em;font-weight:700;
+  max-width:75%;margin-bottom:6px;line-height:1.4}
+.bubble.me{background:#dcfce7;margin-left:auto;border-bottom-right-radius:4px}
+.bubble.them{background:white;border:1px solid #e2e8f0;border-bottom-left-radius:4px}
+.bubble-name{font-size:.7em;color:#94a3b8;font-weight:800;margin-bottom:2px}
+.b-right{text-align:right}
+
+/* ==================== ADMIN SEKMELER ==================== */
+.tab-bar{display:flex;gap:5px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;flex-wrap:wrap}
+.tab-btn{padding:8px 13px;border:none;border-radius:10px;font-family:'Nunito',sans-serif;
+  font-weight:800;font-size:.8em;cursor:pointer;background:#e2e8f0;color:var(--dark);white-space:nowrap;transition:.15s}
+.tab-btn.active{background:var(--pr);color:white}.tab-content{display:none}.tab-content.active{display:block}
+
+.badge{display:inline-block;background:var(--danger);color:white;font-size:.65em;
+  font-weight:900;border-radius:50%;min-width:18px;height:18px;
+  display:inline-flex;align-items:center;justify-content:center;margin-left:4px}
+
+/* ==================== ADMIN KULLANICI SATIRI ==================== */
+.user-row{display:flex;align-items:center;gap:8px;padding:10px 12px;
+  background:white;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:7px;flex-wrap:wrap}
+.user-row .uname{flex:1;font-weight:800;min-width:100px}
+.user-row .umeta{font-size:.78em;color:#94a3b8;font-weight:700}
+.user-row .uactions{display:flex;gap:5px;flex-wrap:wrap}
+
+/* ==================== LİDERLİK ==================== */
+.lb-row{display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:white;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:7px}
+.lb-rank{font-size:1.3em;font-weight:900;min-width:36px;text-align:center}
+.lb-name{flex:1;font-weight:800}.lb-score{font-weight:900;color:var(--pr)}
+
+/* ==================== SONUÇ ==================== */
+.result-icon{font-size:5em;text-align:center;display:block;margin-bottom:10px;animation:bounce 1s infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+.result-score{font-family:'Righteous',cursive;font-size:3.5em;color:var(--pr);text-align:center;display:block}
+.stat-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.stat-box{background:#f1f5f9;border-radius:14px;padding:14px 20px;text-align:center;min-width:90px}
+.stat-box .sv{font-size:2em;font-weight:900}.stat-box .sl{font-size:.78em;color:#94a3b8;font-weight:700}
+.stat-box.ok .sv{color:var(--ok)}.stat-box.bad .sv{color:var(--danger)}
+
+/* ==================== MSG KUTU ==================== */
+.info-msg{padding:10px 14px;border-radius:10px;font-weight:800;font-size:.88em;margin-top:8px;display:none}
+.info-msg.ok{background:#dcfce7;border:1px solid var(--ok);color:#15803d;display:block}
+.info-msg.err{background:#fee2e2;border:1px solid var(--danger);color:#b91c1c;display:block}
+
+/* ==================== JSON ÖRNEK ==================== */
+.json-ex{background:#1e293b;color:#6ee7b7;font-family:'Courier New',monospace;
+  font-size:.78em;padding:12px;border-radius:10px;white-space:pre;overflow-x:auto;margin-bottom:10px}
+
+/* ==================== TERMINAL ==================== */
+.terminal{background:#121212;color:#00ff41;font-family:'Courier New',monospace;
+  font-size:.85em;padding:12px;border-radius:12px;border:2px solid #333;margin-top:10px}
+.terminal textarea{width:100%;height:90px;background:transparent;color:#00ff41;border:none;outline:none;resize:none;font-family:inherit}
+
+/* ==================== SHAKE ==================== */
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+/* ==================== BÖLÜM BAŞLIĞI ==================== */
+.sec-title{font-size:.78em;font-weight:900;color:#94a3b8;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px}
+.divider{height:1px;background:#e2e8f0;margin:16px 0}
+.empty{text-align:center;padding:28px;color:#94a3b8;font-weight:700}
+.empty .ei{font-size:2em;display:block;margin-bottom:6px}
+
+/* ==================== LEVEL BADGE ==================== */
+.level-badge{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.75em;font-weight:800}
+
+@media(max-width:480px){
+  .card{padding:16px}
+  .mode-cards{grid-template-columns:1fr 1fr}
+  .grade-grid{grid-template-columns:repeat(2,1fr)}
+  .cat-grid,.subject-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body class="">
+<div class="container" id="mainWrapper">
+
+<!-- Üst Bar -->
+<div style="display:flex;justify-content:space-between;align-items:center;color:white;margin-bottom:14px">
+  <div>
+    <div style="font-family:&#39;Righteous&#39;,cursive;font-size:1.5em;cursor:pointer;text-shadow:0 2px 8px rgba(0,0,0,0.2)" onclick="goHome()">🏠 Ailece Bil!</div>
+    <div id="modeBadge" style="font-size:.78em;font-weight:800;opacity:.85">🧑 Büyük Modu</div>
+  </div>
+  <div id="navBar" style="display:flex;gap:8px">
+    <span style="color:white;font-weight:800;font-size:.88em">👤 admin</span>
+    <button class="btn btn-gray btn-sm" onclick="showPage(&#39;profilePage&#39;);renderProfile()">Profil</button>
+    <button class="btn btn-danger btn-sm" onclick="openAdmin()">⚙️ Admin</button>
+    <button class="btn btn-danger btn-sm" onclick="doLogout()">Çıkış</button>
+  </div>
+</div>
+
+<!-- Kayan Duyuru -->
+<div id="annBanner" class="marquee-box">
+  <div class="marquee-text" id="annText">GÜLSER MİRAÇ EMİR KILIÇ</div>
+</div>
+
+<!-- ==================== GİRİŞ/KAYIT ==================== -->
+<div id="authPage" class="card hidden">
+  <div style="text-align:center;margin-bottom:20px">
+    <div style="font-size:3em;margin-bottom:6px">🏠</div>
+    <div style="font-family:&#39;Righteous&#39;,cursive;font-size:2.2em;color:var(--pr)">Ailece Bil!</div>
+    <div style="color:#94a3b8;font-size:.9em;font-weight:700;margin-top:6px">🎯 Beraber düşün, birlikte kazan!</div>
+  </div>
+  <div id="authTabs" style="display:flex;gap:6px;margin-bottom:16px">
+    <button class="tab-btn" onclick="switchAuthTab(&#39;login&#39;)">Giriş Yap</button>
+    <button class="tab-btn" onclick="switchAuthTab(&#39;register&#39;)">Kayıt Ol</button>
+  </div>
+  <div id="authContent">
+    
+      <input type="text" class="inp" id="authUser" placeholder="Kullanıcı adı" autocomplete="username">
+      <input type="password" class="inp" id="authPass" placeholder="Şifre" autocomplete="current-password" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()">
+      <button class="btn btn-primary" onclick="doLogin()">🚀 Giriş Yap</button>
+    
+    <div id="authMsg" class="info-msg"></div></div>
+</div>
+
+<!-- ==================== MOD SEÇİCİ ==================== -->
+<div id="modePage" class="card">
+  <div style="text-align:center;margin-bottom:18px">
+    <div style="font-family:&#39;Righteous&#39;,cursive;font-size:1.6em;color:var(--pr)">🏠 Ailece Bil!</div>
+    <div style="color:#94a3b8;font-size:.88em;font-weight:700;margin-top:4px">Kim oynuyor?</div>
+    <div id="totalQBadge" style="margin-top:10px;display:inline-block;background:#fff7ed;border:2px solid var(--pr);
+      border-radius:20px;padding:5px 18px;font-size:.85em;font-weight:900;color:var(--pr)">📚 Toplam 957 Soru</div>
+  </div>
+  <div class="mode-cards">
+    <div class="mode-card mode-kids" onclick="selectMode(&#39;kids&#39;)">
+      <span class="mc-icon">🧒</span>
+      <div class="mc-title">Çocuklar</div>
+      <div class="mc-sub">Sınıf &amp; Konu Seç</div>
+      <div id="kidsQCount" style="margin-top:8px;background:rgba(255,255,255,0.25);border-radius:12px;padding:4px 10px;font-size:.8em;font-weight:800">646 soru</div>
+    </div>
+    <div class="mode-card mode-adult" onclick="selectMode(&#39;adult&#39;)">
+      <span class="mc-icon">🧑</span>
+      <div class="mc-title">Büyükler</div>
+      <div class="mc-sub">Genel Kategoriler</div>
+      <div id="adultQCount" style="margin-top:8px;background:rgba(255,255,255,0.25);border-radius:12px;padding:4px 10px;font-size:.8em;font-weight:800">311 soru</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ÇOCUK: SINIF SEÇİCİ ==================== -->
+<div id="gradePage" class="card hidden">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+    <button class="btn btn-gray btn-sm" onclick="showPage(&#39;modePage&#39;)">← Geri</button>
+    <div class="sec-title" style="margin:0">📚 Sınıfını Seç</div>
+  </div>
+  <div id="gradePageStats" style="margin-bottom:14px">
+    <div style="background:#fff0f6;border:1px solid #fda4af;border-radius:12px;padding:10px 16px;
+      display:flex;align-items:center;gap:10px;font-weight:800;font-size:.9em">
+      🧒 Çocuklar bölümünde toplam
+      <span style="font-size:1.4em;color:var(--kids-pr);font-family:&#39;Righteous&#39;,cursive">509</span>
+      soru var
+    </div></div>
+  <div class="grade-grid" id="gradeGrid"><div class="grade-btn" style="background:#ff6b9d;color:white" onclick="selectGrade(0)">
+      <div style="font-size:1.8em">🌱</div>
+      <div style="font-weight:900">1. Sınıf</div>
+      <div style="font-size:.72em;opacity:.85;margin-top:4px">3 konu</div>
+      <div style="font-size:.78em;background:rgba(0,0,0,0.2);border-radius:10px;padding:2px 8px;margin-top:4px;font-weight:800">57 soru</div>
+    </div><div class="grade-btn" style="background:#ff9f43;color:white" onclick="selectGrade(1)">
+      <div style="font-size:1.8em">📗</div>
+      <div style="font-weight:900">2. Sınıf</div>
+      <div style="font-size:.72em;opacity:.85;margin-top:4px">3 konu</div>
+      <div style="font-size:.78em;background:rgba(0,0,0,0.2);border-radius:10px;padding:2px 8px;margin-top:4px;font-weight:800">50 soru</div>
+    </div><div class="grade-btn" style="background:#ffd166;color:white" onclick="selectGrade(2)">
+      <div style="font-size:1.8em">📘</div>
+      <div style="font-weight:900">3. Sınıf</div>
+      <div style="font-size:.72em;opacity:.85;margin-top:4px">6 konu</div>
+      <div style="font-size:.78em;background:rgba(0,0,0,0.2);border-radius:10px;padding:2px 8px;margin-top:4px;font-weight:800">153 soru</div>
+    </div><div class="grade-btn" style="background:#06d6a0;color:white" onclick="selectGrade(3)">
+      <div style="font-size:1.8em">📙</div>
+      <div style="font-weight:900">4. Sınıf</div>
+      <div style="font-size:.72em;opacity:.85;margin-top:4px">4 konu</div>
+      <div style="font-size:.78em;background:rgba(0,0,0,0.2);border-radius:10px;padding:2px 8px;margin-top:4px;font-weight:800">50 soru</div>
+    </div><div class="grade-btn" style="background:#118ab2;color:white" onclick="selectGrade(4)">
+      <div style="font-size:1.8em">📕</div>
+      <div style="font-weight:900">5. Sınıf</div>
+      <div style="font-size:.72em;opacity:.85;margin-top:4px">5 konu</div>
+      <div style="font-size:.78em;background:rgba(0,0,0,0.2);border-radius:10px;padding:2px 8px;margin-top:4px;font-weight:800">60 soru</div>
+    </div><div class="grade-btn" style="background:#073b4c;color:white" onclick="selectGrade(5)">
+      <div style="font-size:1.8em">🎯</div>
+      <div style="font-weight:900">6. Sınıf</div>
+      <div style="font-size:.72em;opacity:.85;margin-top:4px">5 konu</div>
+      <div style="font-size:.78em;background:rgba(0,0,0,0.2);border-radius:10px;padding:2px 8px;margin-top:4px;font-weight:800">45 soru</div>
+    </div><div class="grade-btn" style="background:#7209b7;color:white" onclick="selectGrade(6)">
+      <div style="font-size:1.8em">🚀</div>
+      <div style="font-weight:900">7. Sınıf</div>
+      <div style="font-size:.72em;opacity:.85;margin-top:4px">5 konu</div>
+      <div style="font-size:.78em;background:rgba(0,0,0,0.2);border-radius:10px;padding:2px 8px;margin-top:4px;font-weight:800">47 soru</div>
+    </div><div class="grade-btn" style="background:#3a0ca3;color:white" onclick="selectGrade(7)">
+      <div style="font-size:1.8em">🎓</div>
+      <div style="font-weight:900">8. Sınıf</div>
+      <div style="font-size:.72em;opacity:.85;margin-top:4px">5 konu</div>
+      <div style="font-size:.78em;background:rgba(0,0,0,0.2);border-radius:10px;padding:2px 8px;margin-top:4px;font-weight:800">47 soru</div>
+    </div></div>
+</div>
+
+<!-- ==================== ÇOCUK: KONU SEÇİCİ ==================== -->
+<div id="subjectPage" class="card hidden">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+    <button class="btn btn-gray btn-sm" onclick="showPage(&#39;gradePage&#39;)">← Geri</button>
+    <div>
+      <div class="sec-title" style="margin:0">📖 Konu Seç</div>
+      <div id="gradeLabel" style="font-weight:900;font-size:1.1em;color:var(--kids-pr)">3. Sınıf</div>
+    </div>
+  </div>
+  <div id="gradeSubStats" style="margin-bottom:12px">
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:10px 16px;
+      display:flex;align-items:center;gap:10px;font-weight:800;font-size:.9em">
+      📚 3. Sınıf için toplam
+      <span style="font-size:1.4em;color:var(--ok);font-family:&#39;Righteous&#39;,cursive">153</span>
+      soru var
+    </div></div>
+  <div class="subject-grid" id="subjectGrid"><div class="subject-btn" onclick="startQuiz(&#39;3. Sınıf|Türkçe&#39;,&#39;3. Sınıf - Türkçe&#39;)">
+      <span class="si">📖</span>
+      <div style="font-weight:900">Türkçe</div>
+      <div style="font-size:.78em;color:var(--ok);font-weight:800;margin-top:4px">
+        27 soru
+      </div>
+    </div><div class="subject-btn" onclick="startQuiz(&#39;3. Sınıf|Matematik&#39;,&#39;3. Sınıf - Matematik&#39;)">
+      <span class="si">🔢</span>
+      <div style="font-weight:900">Matematik</div>
+      <div style="font-size:.78em;color:var(--ok);font-weight:800;margin-top:4px">
+        72 soru
+      </div>
+    </div><div class="subject-btn" onclick="startQuiz(&#39;3. Sınıf|Fen Bilimleri&#39;,&#39;3. Sınıf - Fen Bilimleri&#39;)">
+      <span class="si">🔬</span>
+      <div style="font-weight:900">Fen Bilimleri</div>
+      <div style="font-size:.78em;color:var(--ok);font-weight:800;margin-top:4px">
+        22 soru
+      </div>
+    </div><div class="subject-btn" onclick="startQuiz(&#39;3. Sınıf|Sosyal Bilgiler&#39;,&#39;3. Sınıf - Sosyal Bilgiler&#39;)">
+      <span class="si">🗺️</span>
+      <div style="font-weight:900">Sosyal Bilgiler</div>
+      <div style="font-size:.78em;color:var(--ok);font-weight:800;margin-top:4px">
+        8 soru
+      </div>
+    </div><div class="subject-btn" onclick="startQuiz(&#39;3. Sınıf|Genel Kültür&#39;,&#39;3. Sınıf - Genel Kültür&#39;)">
+      <span class="si">💡</span>
+      <div style="font-weight:900">Genel Kültür</div>
+      <div style="font-size:.78em;color:var(--ok);font-weight:800;margin-top:4px">
+        7 soru
+      </div>
+    </div><div class="subject-btn" onclick="startQuiz(&#39;3. Sınıf|Hayat Bilgisi&#39;,&#39;3. Sınıf - Hayat Bilgisi&#39;)">
+      <span class="si">🌍</span>
+      <div style="font-weight:900">Hayat Bilgisi</div>
+      <div style="font-size:.78em;color:var(--ok);font-weight:800;margin-top:4px">
+        17 soru
+      </div>
+    </div></div>
+</div>
+
+<!-- ==================== BÜYÜKLER: KATEGORİ ==================== -->
+<div id="homePage" class="card hidden">
+  <div id="welcomeZone" style="margin-bottom:16px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <span style="font-size:1.8em">👋</span>
+      <div><div style="font-weight:900;font-size:1.1em">Merhaba, admin!</div>
+      <div style="color:#94a3b8;font-size:.85em;font-weight:700">🏆 Usta · 1679 Puan</div></div>
+    </div>
+    <div style="background:#fff7ed;border:2px solid var(--pr);border-radius:14px;padding:10px 16px;
+      display:flex;align-items:center;gap:8px;font-weight:800;font-size:.88em;margin-bottom:4px">
+      📚 Büyükler bölümünde toplam
+      <span style="font-size:1.5em;color:var(--pr);font-family:&#39;Righteous&#39;,cursive">311</span>
+      soru var
+    </div></div>
+  <div class="sec-title">📂 Kategori Seç</div>
+  <div class="cat-grid" id="categoryGrid">
+    <div class="cat-btn" onclick="startQuiz(&#39;Genel Kültür&#39;,&#39;Genel Kültür&#39;)">
+      <span class="ci">💡</span>Genel Kültür
+      <div class="cc" style="color:var(--ok);font-weight:800">223 soru</div>
+    </div>
+    <div class="cat-btn" onclick="startQuiz(&#39;Tarih&#39;,&#39;Tarih&#39;)">
+      <span class="ci">🏛️</span>Tarih
+      <div class="cc" style="color:var(--ok);font-weight:800">8 soru</div>
+    </div>
+    <div class="cat-btn" onclick="startQuiz(&#39;Bilim&#39;,&#39;Bilim&#39;)">
+      <span class="ci">🔬</span>Bilim
+      <div class="cc" style="color:var(--ok);font-weight:800">8 soru</div>
+    </div>
+    <div class="cat-btn" onclick="startQuiz(&#39;Coğrafya&#39;,&#39;Coğrafya&#39;)">
+      <span class="ci">🗺️</span>Coğrafya
+      <div class="cc" style="color:var(--ok);font-weight:800">8 soru</div>
+    </div>
+    <div class="cat-btn" onclick="startQuiz(&#39;Spor&#39;,&#39;Spor&#39;)">
+      <span class="ci">⚽</span>Spor
+      <div class="cc" style="color:var(--ok);font-weight:800">57 soru</div>
+    </div>
+    <div class="cat-btn" onclick="startQuiz(&#39;Teknoloji&#39;,&#39;Teknoloji&#39;)">
+      <span class="ci">💻</span>Teknoloji
+      <div class="cc" style="color:var(--ok);font-weight:800">7 soru</div>
+    </div></div>
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn btn-primary" style="flex:1" onclick="startQuiz(&#39;Karma&#39;,&#39;Karma&#39;)">🎲 Karma</button>
+    <button class="btn btn-primary" style="flex:1;background:var(--ok)" onclick="showPage(&#39;leaderPage&#39;)">🏆 Sıralama</button>
+    <button class="btn btn-primary" style="flex:1;background:#64748b" onclick="showPage(&#39;profilePage&#39;)">👤 Profil</button>
+    <button id="admBtn" class="btn btn-danger btn-sm" onclick="showPage(&#39;adminPage&#39;)">⚙️ Admin</button>
+  </div>
+</div>
+
+<!-- ==================== QUIZ ==================== -->
+<div id="quizPage" class="card hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+    <div>
+      <div id="qCounter" style="font-weight:900;color:var(--pr);font-size:1.2em">8 / 8</div>
+      <div id="qMeta" style="font-size:.78em;color:#94a3b8;font-weight:700">Tarih</div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-ring" id="timerRing">
+        <small>Süre</small>
+        <span id="timerTxt">19</span>
+      </div>
+    </div>
+    <div id="qScore" style="font-weight:900;font-size:1.1em;color:var(--warn)">🌟 0</div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width: 100%;"></div></div>
+  <div id="qText" style="font-size:clamp(1.05em,3vw,1.3em);font-weight:700;margin-bottom:18px;min-height:50px;line-height:1.5;color:var(--dark)">Türkiye Cumhuriyeti hangi yılda kuruldu?</div>
+  <div id="choiceArea">
+    <button class="choice-btn wrong" onclick="checkAnswer(0)" disabled="">
+      <span class="choice-letter">A</span>1919
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(1)" disabled="">
+      <span class="choice-letter">B</span>1920
+    </button>
+    <button class="choice-btn correct" onclick="checkAnswer(2)" disabled="">
+      <span class="choice-letter">C</span>1923
+    </button>
+    <button class="choice-btn" onclick="checkAnswer(3)" disabled="">
+      <span class="choice-letter">D</span>1925
+    </button></div>
+  <div style="text-align:right;margin-top:6px">
+    <button class="btn btn-gray btn-sm" onclick="quitQuiz()">🚪 Çık</button>
+  </div>
+</div>
+
+<!-- ==================== SONUÇ ==================== -->
+<div id="resultPage" class="card hidden" style="text-align:center">
+  <span class="result-icon" id="resIcon">💪</span>
+  <div style="font-family:&#39;Righteous&#39;,cursive;font-size:2em;color:var(--dark);margin-bottom:6px" id="resTitle">Devam Et!</div>
+  <span class="result-score" id="resScore">0</span>
+  <div style="font-size:.9em;color:#94a3b8;font-weight:700;margin-bottom:6px">Puan</div>
+  <div class="stat-row" id="resStats">
+    <div class="stat-box ok"><div class="sv">0</div><div class="sl">✅ Doğru</div></div>
+    <div class="stat-box bad"><div class="sv">8</div><div class="sl">❌ Yanlış</div></div>
+    <div class="stat-box"><div class="sv">3</div><div class="sl">⏱️ Süre</div></div>
+    <div class="stat-box"><div class="sv" style="color:var(--warn)">%0</div><div class="sl">Başarı</div></div></div>
+  <div id="resLevelUp" style="margin: 10px 0px; padding: 10px; background: rgb(254, 243, 199); border: 1px solid var(--warn); border-radius: 12px; font-weight: 800; color: rgb(146, 64, 14); display: none;">🎉 Seviye atladın! 💎 → 🏆 Usta!</div>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px">
+    <button class="btn btn-primary" style="width:auto;padding:12px 24px" onclick="replayQuiz()">🔄 Tekrar</button>
+    <button class="btn btn-gray" style="width:auto;padding:12px 24px" onclick="goHome()">🏠 Ana Menü</button>
+  </div>
+</div>
+
+<!-- ==================== LİDERLİK ==================== -->
+<div id="leaderPage" class="card hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div style="font-family:&#39;Righteous&#39;,cursive;font-size:1.5em">🏆 Ailece Sıralama</div>
+    <button class="btn btn-gray btn-sm" onclick="goHome()">← Geri</button>
+  </div>
+  <div id="leaderList"></div>
+</div>
+
+<!-- ==================== PROFİL ==================== -->
+<div id="profilePage" class="card hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div style="font-family:&#39;Righteous&#39;,cursive;font-size:1.4em">👤 Profil</div>
+    <button class="btn btn-gray btn-sm" onclick="goHome()">← Geri</button>
+  </div>
+  <div id="profStats" style="background:#f1f5f9;padding:14px;border-radius:14px;margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--pr2));
+        display:flex;align-items:center;justify-content:center;font-size:1.5em;font-weight:900;color:white">
+        A</div>
+      <div><div style="font-weight:900;font-size:1.1em">admin</div>
+        <div style="font-size:.82em;color:#64748b">🏆 Usta
+           · 321 puan kaldı (🦁 Efsane)</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">
+      <div style="background:white;padding:10px;border-radius:10px"><div style="font-weight:900;color:var(--pr);font-size:1.3em">1679</div><div style="font-size:.75em;color:#94a3b8;font-weight:700">Puan</div></div>
+      <div style="background:white;padding:10px;border-radius:10px"><div style="font-weight:900;font-size:1.3em">17</div><div style="font-size:.75em;color:#94a3b8;font-weight:700">Oyun</div></div>
+      <div style="background:white;padding:10px;border-radius:10px"><div style="font-weight:900;color:var(--ok);font-size:1.3em">65</div><div style="font-size:.75em;color:#94a3b8;font-weight:700">✅ Doğru</div></div>
+      <div style="background:white;padding:10px;border-radius:10px"><div style="font-weight:900;color:var(--danger);font-size:1.3em">65</div><div style="font-size:.75em;color:#94a3b8;font-weight:700">❌ Yanlış</div></div>
+    </div></div>
+  <div class="divider"></div>
+  <div class="sec-title">🔑 Şifre Değiştir</div>
+  <input type="password" class="inp" id="newPass" placeholder="Yeni şifre (en az 4 karakter)">
+  <button class="btn btn-primary" onclick="changePass()">💾 Şifreyi Güncelle</button>
+  <div class="divider"></div>
+  <div class="sec-title">💬 Admin Mesajları</div>
+  <div class="msg-thread" id="userMsgThread"><div class="empty"><span class="ei">💬</span>Admin'e mesaj atabilirsiniz</div></div>
+  <div style="display:flex;gap:8px;margin-top:6px">
+    <input type="text" class="inp" id="uMsgInp" style="margin:0;flex:1" placeholder="Mesajınızı yazın..." onkeydown="if(event.key===&#39;Enter&#39;)sendMsg(&#39;user&#39;)">
+    <button class="btn btn-primary" style="width:auto" onclick="sendMsg(&#39;user&#39;)">Gönder</button>
+  </div>
+  <div style="margin-top:10px">
+    <button class="btn btn-danger" style="width:auto;padding:10px 20px" onclick="doLogout()">🚪 Çıkış Yap</button>
+  </div>
+</div>
+
+<!-- ==================== ADMIN PANELİ ==================== -->
+<div id="adminPage" class="card hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div style="font-family:&#39;Righteous&#39;,cursive;font-size:1.4em;color:var(--pr)">⚙️ Ailece Bil! — Admin</div>
+    <button class="btn btn-gray btn-sm" onclick="goHome()">← Kapat</button>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn" onclick="setTab(&#39;tUsers&#39;,this)">👥 Oyuncular</button>
+    <button class="tab-btn" onclick="setTab(&#39;tMsgs&#39;,this)" id="tMsgBtn">💬 Mesajlar<span class="badge" id="msgBadge" style="display:none">0</span></button>
+    <button class="tab-btn" onclick="setTab(&#39;tAnn&#39;,this)">📢 Duyuru</button>
+    <button class="tab-btn" onclick="setTab(&#39;tCats&#39;,this)">📁 Kategoriler</button>
+    <button class="tab-btn" onclick="setTab(&#39;tQs&#39;,this)">📝 Sorular</button>
+    <button class="tab-btn active" onclick="setTab(&#39;tBulk&#39;,this)">📦 Toplu Ekle</button>
+    <button class="tab-btn" onclick="setTab(&#39;tTerm&#39;,this)">💻 Terminal</button>
+    <button class="tab-btn" onclick="setTab(&#39;tSet&#39;,this)">🔐 Ayarlar</button>
+  </div>
+
+  <!-- Oyuncular -->
+  <div id="tUsers" class="tab-content">
+    <input class="inp" id="userSearch" placeholder="🔍 Oyuncu ara..." oninput="renderUsers()" style="margin-bottom:10px">
+    <div id="admUserList"></div>
+  </div>
+
+  <!-- Mesajlar -->
+  <div id="tMsgs" class="tab-content">
+    <div style="display:grid;grid-template-columns:180px 1fr;gap:12px" id="msgPanels">
+      <div>
+        <div class="sec-title">Konuşmalar</div>
+        <div id="convList"><div class="empty"><span class="ei">💬</span>Mesaj yok</div></div>
+      </div>
+      <div id="chatPanel"><div class="empty"><span class="ei">💬</span>Konuşma seçin</div></div>
+    </div>
+  </div>
+
+  <!-- Duyuru -->
+  <div id="tAnn" class="tab-content">
+    <div style="background:#fef3c7;border:1px solid var(--warn);border-radius:12px;padding:12px;margin-bottom:12px;font-size:.88em;font-weight:700;color:#92400e">
+      📢 Kayan yazı tüm kullanıcıların ekranında görünür.
+    </div>
+    <label class="lbl">Duyuru Metni</label>
+    <input class="inp" id="annInp" placeholder="Ekranda kayan yazı...">
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-warn btn-full" onclick="setBroadcast(true)">▶️ Yayına Ver</button>
+      <button class="btn btn-danger" style="width:auto;padding:12px 18px" onclick="setBroadcast(false)">⏹️ Durdur</button>
+    </div>
+  </div>
+
+  <!-- Kategoriler -->
+  <div id="tCats" class="tab-content">
+    <!-- Büyükler kategorisi ekle -->
+    <div style="background:#f1f5f9;border-radius:14px;padding:14px;margin-bottom:14px">
+      <div class="sec-title">🧑 Büyükler — Yeni Kategori</div>
+      <div class="row2">
+        <div><label class="lbl">Kategori Adı</label><input class="inp" id="newAdultCat" placeholder="örn: Spor"></div>
+        <div><label class="lbl">İkon (emoji)</label><input class="inp" id="newAdultIcon" placeholder="⚽" maxlength="2"></div>
+      </div>
+      <button class="btn btn-primary" onclick="addAdultCategory()">➕ Büyükler Kategorisi Ekle</button>
+      <div id="adultCatMsg" class="info-msg"></div>
+    </div>
+
+    <!-- Çocuklar kategori/konu ekle -->
+    <div style="background:#fff0f6;border:1px solid #fda4af;border-radius:14px;padding:14px;margin-bottom:14px">
+      <div class="sec-title">🧒 Çocuklar — Yeni Sınıf</div>
+      <div class="row2">
+        <div><label class="lbl">Sınıf Adı</label><input class="inp" id="newGradeName" placeholder="örn: 3. Sınıf"></div>
+        <div><label class="lbl">İkon</label><input class="inp" id="newGradeIcon" placeholder="📗" maxlength="2"></div>
+      </div>
+      <button class="btn btn-kids btn-full" onclick="addGrade()">➕ Sınıf Ekle</button>
+      <div id="gradeCatMsg" class="info-msg"></div>
+    </div>
+
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:14px;padding:14px;margin-bottom:14px">
+      <div class="sec-title">📚 Çocuklar — Yeni Konu/Ders</div>
+      <div><label class="lbl">Hangi Sınıfa?</label><select class="select" id="subjectGradeSelect"></select></div>
+      <div class="row2">
+        <div><label class="lbl">Konu/Ders Adı</label><input class="inp" id="newSubjectName" placeholder="örn: Matematik"></div>
+        <div><label class="lbl">İkon</label><input class="inp" id="newSubjectIcon" placeholder="🔢" maxlength="2"></div>
+      </div>
+      <button class="btn btn-ok btn-full" onclick="addSubject()">➕ Konu Ekle</button>
+      <div id="subjectMsg" class="info-msg"></div>
+    </div>
+
+    <!-- Mevcut Yapı -->
+    <div class="sec-title">📋 Mevcut Kategori Yapısı</div>
+    <div id="catStructure"></div>
+  </div>
+
+  <!-- Sorular -->
+  <div id="tQs" class="tab-content">
+    <div style="background:#f8fafc;border-radius:14px;padding:14px;margin-bottom:14px">
+      <div class="sec-title">📝 Yeni Soru Ekle</div>
+      <label class="lbl">Soru Metni</label>
+      <textarea class="inp" id="nq_q" rows="2" placeholder="Soruyu buraya yazın..." style="resize:vertical"></textarea>
+      <div class="row2">
+        <div><label class="lbl">Şık A</label><input class="inp" id="nq_a" placeholder="Şık A"></div>
+        <div><label class="lbl">Şık B</label><input class="inp" id="nq_b" placeholder="Şık B"></div>
+        <div><label class="lbl">Şık C</label><input class="inp" id="nq_c" placeholder="Şık C"></div>
+        <div><label class="lbl">Şık D</label><input class="inp" id="nq_d" placeholder="Şık D"></div>
+      </div>
+      <div class="row2">
+        <div><label class="lbl">Doğru Cevap</label>
+          <select class="select" id="nq_correct">
+            <option value="0">A</option><option value="1">B</option>
+            <option value="2">C</option><option value="3">D</option>
+          </select></div>
+        <div><label class="lbl">Kategori / Konu</label>
+          <select class="select" id="nq_cat"><optgroup label="🧑 Büyükler"><option value="Genel Kültür">💡 Genel Kültür</option><option value="Tarih">🏛️ Tarih</option><option value="Bilim">🔬 Bilim</option><option value="Coğrafya">🗺️ Coğrafya</option><option value="Spor">⚽ Spor</option><option value="Teknoloji">💻 Teknoloji</option></optgroup><optgroup label="🧒 Çocuklar"><option value="1. Sınıf|Türkçe">🌱 1. Sınıf → 📖 Türkçe</option><option value="1. Sınıf|Matematik">🌱 1. Sınıf → 🔢 Matematik</option><option value="1. Sınıf|Hayat Bilgisi">🌱 1. Sınıf → 🌍 Hayat Bilgisi</option><option value="2. Sınıf|Türkçe">📗 2. Sınıf → 📖 Türkçe</option><option value="2. Sınıf|Matematik">📗 2. Sınıf → 🔢 Matematik</option><option value="2. Sınıf|Hayat Bilgisi">📗 2. Sınıf → 🌍 Hayat Bilgisi</option><option value="3. Sınıf|Türkçe">📘 3. Sınıf → 📖 Türkçe</option><option value="3. Sınıf|Matematik">📘 3. Sınıf → 🔢 Matematik</option><option value="3. Sınıf|Fen Bilimleri">📘 3. Sınıf → 🔬 Fen Bilimleri</option><option value="3. Sınıf|Sosyal Bilgiler">📘 3. Sınıf → 🗺️ Sosyal Bilgiler</option><option value="3. Sınıf|Genel Kültür">📘 3. Sınıf → 💡 Genel Kültür</option><option value="3. Sınıf|Hayat Bilgisi">📘 3. Sınıf → 🌍 Hayat Bilgisi</option><option value="4. Sınıf|Türkçe">📙 4. Sınıf → 📖 Türkçe</option><option value="4. Sınıf|Matematik">📙 4. Sınıf → 🔢 Matematik</option><option value="4. Sınıf|Fen Bilimleri">📙 4. Sınıf → 🔬 Fen Bilimleri</option><option value="4. Sınıf|Sosyal Bilgiler">📙 4. Sınıf → 🗺️ Sosyal Bilgiler</option><option value="5. Sınıf|Türkçe">📕 5. Sınıf → 📖 Türkçe</option><option value="5. Sınıf|Matematik">📕 5. Sınıf → 🔢 Matematik</option><option value="5. Sınıf|Fen Bilimleri">📕 5. Sınıf → 🔬 Fen Bilimleri</option><option value="5. Sınıf|Sosyal Bilgiler">📕 5. Sınıf → 🗺️ Sosyal Bilgiler</option><option value="5. Sınıf|İngilizce">📕 5. Sınıf → 🇬🇧 İngilizce</option><option value="6. Sınıf|Türkçe">🎯 6. Sınıf → 📖 Türkçe</option><option value="6. Sınıf|Matematik">🎯 6. Sınıf → 🔢 Matematik</option><option value="6. Sınıf|Fen Bilimleri">🎯 6. Sınıf → 🔬 Fen Bilimleri</option><option value="6. Sınıf|Sosyal Bilgiler">🎯 6. Sınıf → 🗺️ Sosyal Bilgiler</option><option value="6. Sınıf|İngilizce">🎯 6. Sınıf → 🇬🇧 İngilizce</option><option value="7. Sınıf|Türkçe">🚀 7. Sınıf → 📖 Türkçe</option><option value="7. Sınıf|Matematik">🚀 7. Sınıf → 🔢 Matematik</option><option value="7. Sınıf|Fen Bilimleri">🚀 7. Sınıf → 🔬 Fen Bilimleri</option><option value="7. Sınıf|T.C. İnkılap Tarihi">🚀 7. Sınıf → 🏛️ T.C. İnkılap Tarihi</option><option value="7. Sınıf|İngilizce">🚀 7. Sınıf → 🇬🇧 İngilizce</option><option value="8. Sınıf|Türkçe">🎓 8. Sınıf → 📖 Türkçe</option><option value="8. Sınıf|Matematik">🎓 8. Sınıf → 🔢 Matematik</option><option value="8. Sınıf|Fen Bilimleri">🎓 8. Sınıf → 🔬 Fen Bilimleri</option><option value="8. Sınıf|T.C. İnkılap Tarihi">🎓 8. Sınıf → 🏛️ T.C. İnkılap Tarihi</option><option value="8. Sınıf|İngilizce">🎓 8. Sınıf → 🇬🇧 İngilizce</option></optgroup></select></div>
+      </div>
+      <button class="btn btn-ok" onclick="addQuestion()">✅ Soruyu Kaydet</button>
+      <div id="nqMsg" class="info-msg"></div>
+    </div>
+    <div class="sec-title">📋 Soru Listesi</div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+      <input class="inp" id="qSearch" style="margin:0;flex:1" placeholder="🔍 Ara..." oninput="renderQList()">
+      <select class="select" id="qCatFilter" style="margin:0;max-width:160px" onchange="renderQList()"><option value="">Tümü</option><optgroup label="🧑 Büyükler"><option value="Genel Kültür">💡 Genel Kültür</option><option value="Tarih">🏛️ Tarih</option><option value="Bilim">🔬 Bilim</option><option value="Coğrafya">🗺️ Coğrafya</option><option value="Spor">⚽ Spor</option><option value="Teknoloji">💻 Teknoloji</option></optgroup><optgroup label="🧒 Çocuklar"><option value="1. Sınıf|Türkçe">🌱 1. Sınıf → 📖 Türkçe</option><option value="1. Sınıf|Matematik">🌱 1. Sınıf → 🔢 Matematik</option><option value="1. Sınıf|Hayat Bilgisi">🌱 1. Sınıf → 🌍 Hayat Bilgisi</option><option value="2. Sınıf|Türkçe">📗 2. Sınıf → 📖 Türkçe</option><option value="2. Sınıf|Matematik">📗 2. Sınıf → 🔢 Matematik</option><option value="2. Sınıf|Hayat Bilgisi">📗 2. Sınıf → 🌍 Hayat Bilgisi</option><option value="3. Sınıf|Türkçe">📘 3. Sınıf → 📖 Türkçe</option><option value="3. Sınıf|Matematik">📘 3. Sınıf → 🔢 Matematik</option><option value="3. Sınıf|Fen Bilimleri">📘 3. Sınıf → 🔬 Fen Bilimleri</option><option value="3. Sınıf|Sosyal Bilgiler">📘 3. Sınıf → 🗺️ Sosyal Bilgiler</option><option value="3. Sınıf|Genel Kültür">📘 3. Sınıf → 💡 Genel Kültür</option><option value="3. Sınıf|Hayat Bilgisi">📘 3. Sınıf → 🌍 Hayat Bilgisi</option><option value="4. Sınıf|Türkçe">📙 4. Sınıf → 📖 Türkçe</option><option value="4. Sınıf|Matematik">📙 4. Sınıf → 🔢 Matematik</option><option value="4. Sınıf|Fen Bilimleri">📙 4. Sınıf → 🔬 Fen Bilimleri</option><option value="4. Sınıf|Sosyal Bilgiler">📙 4. Sınıf → 🗺️ Sosyal Bilgiler</option><option value="5. Sınıf|Türkçe">📕 5. Sınıf → 📖 Türkçe</option><option value="5. Sınıf|Matematik">📕 5. Sınıf → 🔢 Matematik</option><option value="5. Sınıf|Fen Bilimleri">📕 5. Sınıf → 🔬 Fen Bilimleri</option><option value="5. Sınıf|Sosyal Bilgiler">📕 5. Sınıf → 🗺️ Sosyal Bilgiler</option><option value="5. Sınıf|İngilizce">📕 5. Sınıf → 🇬🇧 İngilizce</option><option value="6. Sınıf|Türkçe">🎯 6. Sınıf → 📖 Türkçe</option><option value="6. Sınıf|Matematik">🎯 6. Sınıf → 🔢 Matematik</option><option value="6. Sınıf|Fen Bilimleri">🎯 6. Sınıf → 🔬 Fen Bilimleri</option><option value="6. Sınıf|Sosyal Bilgiler">🎯 6. Sınıf → 🗺️ Sosyal Bilgiler</option><option value="6. Sınıf|İngilizce">🎯 6. Sınıf → 🇬🇧 İngilizce</option><option value="7. Sınıf|Türkçe">🚀 7. Sınıf → 📖 Türkçe</option><option value="7. Sınıf|Matematik">🚀 7. Sınıf → 🔢 Matematik</option><option value="7. Sınıf|Fen Bilimleri">🚀 7. Sınıf → 🔬 Fen Bilimleri</option><option value="7. Sınıf|T.C. İnkılap Tarihi">🚀 7. Sınıf → 🏛️ T.C. İnkılap Tarihi</option><option value="7. Sınıf|İngilizce">🚀 7. Sınıf → 🇬🇧 İngilizce</option><option value="8. Sınıf|Türkçe">🎓 8. Sınıf → 📖 Türkçe</option><option value="8. Sınıf|Matematik">🎓 8. Sınıf → 🔢 Matematik</option><option value="8. Sınıf|Fen Bilimleri">🎓 8. Sınıf → 🔬 Fen Bilimleri</option><option value="8. Sınıf|T.C. İnkılap Tarihi">🎓 8. Sınıf → 🏛️ T.C. İnkılap Tarihi</option><option value="8. Sınıf|İngilizce">🎓 8. Sınıf → 🇬🇧 İngilizce</option></optgroup></select>
+    </div>
+    <div id="qList">
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Türkiye&#39;nin başkenti neresidir?">Türkiye'nin başkenti neresidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Genel Kültür</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Dünyanın en büyük okyanusu hangisidir?">Dünyanın en büyük okyanusu hangisidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Genel Kültür</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(2)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Hangi gezegen Güneş Sistemi&#39;nin en büyüğüdür?">Hangi gezegen Güneş Sistemi'nin en büyüğüdür?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Bilim</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(3)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="DNA&#39;nın açılımı nedir?">DNA'nın açılımı nedir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Bilim</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(4)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="İstanbul hangi yılda fethedildi?">İstanbul hangi yılda fethedildi?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Tarih</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(5)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Osmanlı İmparatorluğu&#39;nun kurucusu kimdir?">Osmanlı İmparatorluğu'nun kurucusu kimdir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Tarih</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(6)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Dünyanın en büyük kıtası hangisidir?">Dünyanın en büyük kıtası hangisidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Coğrafya</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(7)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Türkiye&#39;nin en uzun nehri hangisidir?">Türkiye'nin en uzun nehri hangisidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Coğrafya</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(8)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Futbolda bir takımda sahada kaç oyuncu olur?">Futbolda bir takımda sahada kaç oyuncu olur?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Spor</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(9)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Hangi ülke 2022 FIFA Dünya Kupası&#39;nı kazandı?">Hangi ülke 2022 FIFA Dünya Kupası'nı kazandı?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Spor</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(10)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Python hangi tür bir programlama dilidir?">Python hangi tür bir programlama dilidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Teknoloji</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(11)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="WWW&#39;nin açılımı nedir?">WWW'nin açılımı nedir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Teknoloji</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(12)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Türkiye Cumhuriyeti hangi yılda kuruldu?">Türkiye Cumhuriyeti hangi yılda kuruldu?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Tarih</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(13)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Işığın boşluktaki hızı yaklaşık ne kadardır?">Işığın boşluktaki hızı yaklaşık ne kadardır?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Bilim</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(14)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Nil Nehri hangi ülkede denize dökülür?">Nil Nehri hangi ülkede denize dökülür?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Coğrafya</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(15)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="&#39;Araba&#39; kelimesinde kaç hece vardır?">'Araba' kelimesinde kaç hece vardır?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        1. Sınıf → Türkçe</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(101)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Türk alfabesinde kaç sesli harf vardır?">Türk alfabesinde kaç sesli harf vardır?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        1. Sınıf → Türkçe</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(102)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Aşağıdakilerden hangisi büyük harf ile başlamalıdır?">Aşağıdakilerden hangisi büyük harf ile başlamalıdır?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        1. Sınıf → Türkçe</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(103)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="5 + 3 = ?">5 + 3 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        1. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(111)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="10 - 4 = ?">10 - 4 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        1. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(112)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="2 + 2 + 2 = ?">2 + 2 + 2 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        1. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(113)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="15 + 8 = ?">15 + 8 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        2. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(121)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="30 - 12 = ?">30 - 12 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        2. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(122)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="4 x 3 = ?">4 x 3 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        2. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(123)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="&#39;Okul&#39; kelimesinin zıt anlamlısı nedir?">'Okul' kelimesinin zıt anlamlısı nedir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        2. Sınıf → Türkçe</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(131)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Cümle hangi işaret ile biter?">Cümle hangi işaret ile biter?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        2. Sınıf → Türkçe</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(132)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="125 + 75 = ?">125 + 75 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        3. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(141)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="7 x 8 = ?">7 x 8 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        3. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(142)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="100&#39;ün yarısı kaçtır?">100'ün yarısı kaçtır?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        3. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(143)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Bitkiler büyümek için neye ihtiyaç duyar?">Bitkiler büyümek için neye ihtiyaç duyar?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        3. Sınıf → Fen Bilimleri</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(151)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Hangi hayvan memelilerden değildir?">Hangi hayvan memelilerden değildir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        3. Sınıf → Fen Bilimleri</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(152)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="250 x 4 = ?">250 x 4 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        4. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(161)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="144 ÷ 12 = ?">144 ÷ 12 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        4. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(162)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Bir üçgenin iç açıları toplamı kaç derecedir?">Bir üçgenin iç açıları toplamı kaç derecedir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        5. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(171)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="3/4 + 1/4 = ?">3/4 + 1/4 = ?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        5. Sınıf → Matematik</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(172)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="&#39;Elma&#39; İngilizce&#39;de nasıl söylenir?">'Elma' İngilizce'de nasıl söylenir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        5. Sınıf → İngilizce</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(181)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="What color is the sky?">What color is the sky?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        5. Sınıf → İngilizce</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(182)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Dünyanın en büyük ülkesi hangisidir?">Dünyanın en büyük ülkesi hangisidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Genel Kültür</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1001)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="İnsan vücudunda kaç kemik vardır?">İnsan vücudunda kaç kemik vardır?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Genel Kültür</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1002)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Hangi metal en iyi elektrik iletkendir?">Hangi metal en iyi elektrik iletkendir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Genel Kültür</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1003)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Dünya&#39;nın uydusu nedir?">Dünya'nın uydusu nedir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Genel Kültür</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1004)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Bir yılda kaç hafta vardır?">Bir yılda kaç hafta vardır?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Genel Kültür</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1005)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Osmanlı Devleti hangi yılda yıkıldı?">Osmanlı Devleti hangi yılda yıkıldı?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Tarih</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1006)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Atatürk hangi şehirde doğdu?">Atatürk hangi şehirde doğdu?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Tarih</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1007)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Kurtuluş Savaşı hangi zaferle sona erdi?">Kurtuluş Savaşı hangi zaferle sona erdi?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Tarih</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1008)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="İlk Türk devleti hangisidir?">İlk Türk devleti hangisidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Tarih</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1009)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Fransız İhtilali hangi yılda oldu?">Fransız İhtilali hangi yılda oldu?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Tarih</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1010)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Suyun kimyasal formülü nedir?">Suyun kimyasal formülü nedir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Bilim</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1011)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Güneş sistemi kaç gezegenden oluşur?">Güneş sistemi kaç gezegenden oluşur?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Bilim</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1012)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Işık bir yılda kaç km yol alır?">Işık bir yılda kaç km yol alır?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Bilim</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1013)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Hangi organ kanı temizler?">Hangi organ kanı temizler?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Bilim</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1014)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Elektriğin birimi nedir?">Elektriğin birimi nedir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Bilim</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1015)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Türkiye kaç ilden oluşur?">Türkiye kaç ilden oluşur?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Coğrafya</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1016)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Dünyanın en uzun nehri hangisidir?">Dünyanın en uzun nehri hangisidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Coğrafya</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1017)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Japonya&#39;nın başkenti neresidir?">Japonya'nın başkenti neresidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Coğrafya</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1018)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="En küçük kıta hangisidir?">En küçük kıta hangisidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Coğrafya</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1019)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Türkiye&#39;nin en yüksek dağı hangisidir?">Türkiye'nin en yüksek dağı hangisidir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Coğrafya</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1020)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Bir futbol maçı kaç dakika sürer?">Bir futbol maçı kaç dakika sürer?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Spor</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1021)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Olimpiyatlar kaç yılda bir düzenlenir?">Olimpiyatlar kaç yılda bir düzenlenir?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Spor</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1022)">🗑️</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="Basketbolda bir maç kaç periyottan oluşur?">Basketbolda bir maç kaç periyottan oluşur?</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        Spor</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(1023)">🗑️</button>
+    </div><p style="text-align:center;color:#94a3b8;padding:8px;font-size:.85em">...ve 897 soru daha</p></div>
+    <div style="margin-top:10px;text-align:right">
+      <button class="btn btn-danger btn-sm" onclick="resetQuestions()">🔄 Sorular Sıfırla</button>
+    </div>
+  </div>
+
+  <!-- Toplu Ekle -->
+  <div id="tBulk" class="tab-content active">
+    <div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;padding:12px;margin-bottom:10px;font-size:.85em;font-weight:700;color:#92400e">
+      📌 <b>q</b> = soru metni &nbsp;|&nbsp; <b>o</b> = 4 şık (dizi) &nbsp;|&nbsp; <b>a</b> = doğru indeks (0=A, 1=B, 2=C, 3=D) &nbsp;|&nbsp; <b>c</b> = kategori adı (tam yazılmalı)
+    </div>
+    <div class="json-ex">[
+  {
+    "q": "Türkiye'nin başkenti neresidir?",
+    "o": ["İstanbul", "Ankara", "İzmir", "Bursa"],
+    "a": 1,
+    "c": "Genel Kültür"
+  },
+  {
+    "q": "5 + 3 kaçtır?",
+    "o": ["6", "7", "8", "9"],
+    "a": 2,
+    "c": "1. Sınıf|Matematik"
+  }
+]</div>
+    <button class="btn btn-warn btn-sm" style="width:auto;margin-bottom:10px" onclick="showValidCats()">📋 Geçerli Kategori Adlarını Listele</button>
+    <div id="validCatList" style="display: none; background: rgb(241, 245, 249); border-radius: 10px; padding: 10px; margin-bottom: 10px; font-size: 0.8em; font-weight: 700; color: rgb(71, 85, 105); line-height: 2;"><div style="margin-bottom:6px;font-size:.85em;color:#6366f1;font-weight:900">🧑 Büyükler:</div><span style="background:#e0e7ff;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">💡 Genel Kültür</span><span style="background:#e0e7ff;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🏛️ Tarih</span><span style="background:#e0e7ff;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🔬 Bilim</span><span style="background:#e0e7ff;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🗺️ Coğrafya</span><span style="background:#e0e7ff;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">⚽ Spor</span><span style="background:#e0e7ff;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">💻 Teknoloji</span><div style="margin:8px 0 6px;font-size:.85em;color:#ff6b9d;font-weight:900">🧒 Çocuklar (Sınıf|Konu formatında):</div><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🌱 1. Sınıf|Türkçe</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🌱 1. Sınıf|Matematik</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🌱 1. Sınıf|Hayat Bilgisi</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📗 2. Sınıf|Türkçe</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📗 2. Sınıf|Matematik</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📗 2. Sınıf|Hayat Bilgisi</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📘 3. Sınıf|Türkçe</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📘 3. Sınıf|Matematik</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📘 3. Sınıf|Fen Bilimleri</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📘 3. Sınıf|Sosyal Bilgiler</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📘 3. Sınıf|Genel Kültür</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📘 3. Sınıf|Hayat Bilgisi</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📙 4. Sınıf|Türkçe</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📙 4. Sınıf|Matematik</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📙 4. Sınıf|Fen Bilimleri</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📙 4. Sınıf|Sosyal Bilgiler</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📕 5. Sınıf|Türkçe</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📕 5. Sınıf|Matematik</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📕 5. Sınıf|Fen Bilimleri</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📕 5. Sınıf|Sosyal Bilgiler</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">📕 5. Sınıf|İngilizce</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎯 6. Sınıf|Türkçe</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎯 6. Sınıf|Matematik</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎯 6. Sınıf|Fen Bilimleri</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎯 6. Sınıf|Sosyal Bilgiler</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎯 6. Sınıf|İngilizce</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🚀 7. Sınıf|Türkçe</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🚀 7. Sınıf|Matematik</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🚀 7. Sınıf|Fen Bilimleri</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🚀 7. Sınıf|T.C. İnkılap Tarihi</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🚀 7. Sınıf|İngilizce</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎓 8. Sınıf|Türkçe</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎓 8. Sınıf|Matematik</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎓 8. Sınıf|Fen Bilimleri</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎓 8. Sınıf|T.C. İnkılap Tarihi</span><span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">🎓 8. Sınıf|İngilizce</span></div>
+    <label class="lbl">JSON Yapıştır</label>
+    <textarea class="inp" id="bulkInp" rows="10" style="resize:vertical;font-family:&#39;Courier New&#39;,monospace;font-size:.88em" placeholder="[{&quot;q&quot;:&quot;Soru metni&quot;,&quot;o&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;a&quot;:0,&quot;c&quot;:&quot;Genel Kültür&quot;}]"></textarea>
+    <button class="btn btn-primary" onclick="doBulk()">📦 Toplu Yükle</button>
+    <div id="bulkMsg" class="info-msg">✅ 99 soru başarıyla eklendi! Toplam: 957
+⚠️ 1 uyarı: #62: "o" (şıklar) 4 elemanlı dizi olmalı</div>
+  </div>
+
+  <!-- Terminal -->
+  <div id="tTerm" class="tab-content">
+    <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:12px;padding:12px;margin-bottom:10px;font-size:.85em;font-weight:700;color:#b91c1c">
+      ⚠️ Dikkat: Bu terminal doğrudan JavaScript çalıştırır. Sadece yetkili komutlar için kullanın.
+    </div>
+    <div style="font-size:.82em;color:#64748b;margin-bottom:8px;font-weight:700">
+      Örnek komutlar:<br>
+      • Puan sıfırla: <code>users.forEach(u =&gt; u.s=0)</code><br>
+      • Admin yap: <code>users.find(x=&gt;x.u==='AD').adm=true</code>
+    </div>
+    <div class="terminal">
+      <strong style="color:#00ff41">💻 Sistem Terminali</strong>
+      <textarea id="termInp" placeholder="// Kodu buraya yazın..."></textarea>
+    </div>
+    <button class="btn btn-primary" style="background:#121212;color:#00ff41;margin-top:8px" onclick="runTerminal()">▶ KOMUTU ÇALIŞTIR</button>
+    <div id="termMsg" class="info-msg">✅ Komut başarıyla çalıştırıldı!</div>
+  </div>
+
+  <!-- Ayarlar -->
+  <div id="tSet" class="tab-content">
+    <div class="sec-title">🔐 Admin Şifre Değiştir</div>
+    <input type="password" class="inp" id="oldPass" placeholder="Mevcut şifre">
+    <input type="password" class="inp" id="newAdminPass" placeholder="Yeni şifre">
+    <input type="password" class="inp" id="newAdminPass2" placeholder="Yeni şifre (tekrar)">
+    <button class="btn btn-danger" onclick="changeAdminPass()">🔑 Şifreyi Değiştir</button>
+    <div id="passMsg" class="info-msg"></div>
+    <div class="divider"></div>
+    <div class="sec-title" style="color:var(--danger)">⚠️ Tehlikeli</div>
+    <button class="btn btn-danger btn-sm" onclick="nukeAll()">🗑️ TÜM VERİLERİ SİL</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ==================== LOCALSTORAGE YARDIMCI ====================
+const LS={
+  get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch{return null}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{return false}},
+  del(k){try{localStorage.removeItem(k)}catch{}}
+};
+
+// ==================== VERİ KATMANI ====================
+const STORE_KEY='ailecebil_v1';
+
+function getStore(){
+  return LS.get(STORE_KEY) || buildDefault();
+}
+function setStore(s){LS.set(STORE_KEY,s)}
+
+function buildDefault(){
+  return {
+    users:[{id:'admin',u:'admin',p:'admin1234',s:0,pl:0,c:0,w:0,adm:true,b:false,m:[]}],
+    questions: getDefaultQuestions(),
+    // Büyükler kategorileri
+    adultCats:[
+      {name:'Genel Kültür',icon:'💡'},
+      {name:'Tarih',icon:'🏛️'},
+      {name:'Bilim',icon:'🔬'},
+      {name:'Coğrafya',icon:'🗺️'},
+      {name:'Spor',icon:'⚽'},
+      {name:'Teknoloji',icon:'💻'}
+    ],
+    // Çocuklar: sınıflar ve konular
+    grades:[
+      {name:'1. Sınıf',icon:'🌱',subjects:[{name:'Türkçe',icon:'📖'},{name:'Matematik',icon:'🔢'},{name:'Hayat Bilgisi',icon:'🌍'}]},
+      {name:'2. Sınıf',icon:'📗',subjects:[{name:'Türkçe',icon:'📖'},{name:'Matematik',icon:'🔢'},{name:'Hayat Bilgisi',icon:'🌍'}]},
+      {name:'3. Sınıf',icon:'📘',subjects:[{name:'Türkçe',icon:'📖'},{name:'Matematik',icon:'🔢'},{name:'Fen Bilimleri',icon:'🔬'},{name:'Sosyal Bilgiler',icon:'🗺️'}]},
+      {name:'4. Sınıf',icon:'📙',subjects:[{name:'Türkçe',icon:'📖'},{name:'Matematik',icon:'🔢'},{name:'Fen Bilimleri',icon:'🔬'},{name:'Sosyal Bilgiler',icon:'🗺️'}]},
+      {name:'5. Sınıf',icon:'📕',subjects:[{name:'Türkçe',icon:'📖'},{name:'Matematik',icon:'🔢'},{name:'Fen Bilimleri',icon:'🔬'},{name:'Sosyal Bilgiler',icon:'🗺️'},{name:'İngilizce',icon:'🇬🇧'}]},
+      {name:'6. Sınıf',icon:'🎯',subjects:[{name:'Türkçe',icon:'📖'},{name:'Matematik',icon:'🔢'},{name:'Fen Bilimleri',icon:'🔬'},{name:'Sosyal Bilgiler',icon:'🗺️'},{name:'İngilizce',icon:'🇬🇧'}]},
+      {name:'7. Sınıf',icon:'🚀',subjects:[{name:'Türkçe',icon:'📖'},{name:'Matematik',icon:'🔢'},{name:'Fen Bilimleri',icon:'🔬'},{name:'T.C. İnkılap Tarihi',icon:'🏛️'},{name:'İngilizce',icon:'🇬🇧'}]},
+      {name:'8. Sınıf',icon:'🎓',subjects:[{name:'Türkçe',icon:'📖'},{name:'Matematik',icon:'🔢'},{name:'Fen Bilimleri',icon:'🔬'},{name:'T.C. İnkılap Tarihi',icon:'🏛️'},{name:'İngilizce',icon:'🇬🇧'}]}
+    ],
+    announcement:{text:'',active:false},
+    nextId:1000
+  };
+}
+
+function getDefaultQuestions(){
+  return [
+    // BÜYÜKLER
+    {id:1,q:"Türkiye'nin başkenti neresidir?",o:["İstanbul","Ankara","İzmir","Bursa"],a:1,c:"Genel Kültür"},
+    {id:2,q:"Dünyanın en büyük okyanusu hangisidir?",o:["Atlantik","Hint","Arktik","Pasifik"],a:3,c:"Genel Kültür"},
+    {id:3,q:"Hangi gezegen Güneş Sistemi'nin en büyüğüdür?",o:["Satürn","Jüpiter","Neptün","Uranüs"],a:1,c:"Bilim"},
+    {id:4,q:"DNA'nın açılımı nedir?",o:["Deoksiribonükleik Asit","Dinükleik Asit","Deoksiribaz Asit","Diamin Nükleik"],a:0,c:"Bilim"},
+    {id:5,q:"İstanbul hangi yılda fethedildi?",o:["1389","1402","1453","1492"],a:2,c:"Tarih"},
+    {id:6,q:"Osmanlı İmparatorluğu'nun kurucusu kimdir?",o:["Orhan Gazi","Osman Gazi","Murat I","Yıldırım Bayezid"],a:1,c:"Tarih"},
+    {id:7,q:"Dünyanın en büyük kıtası hangisidir?",o:["Afrika","Amerika","Asya","Avustralya"],a:2,c:"Coğrafya"},
+    {id:8,q:"Türkiye'nin en uzun nehri hangisidir?",o:["Dicle","Fırat","Kızılırmak","Sakarya"],a:2,c:"Coğrafya"},
+    {id:9,q:"Futbolda bir takımda sahada kaç oyuncu olur?",o:["9","10","11","12"],a:2,c:"Spor"},
+    {id:10,q:"Hangi ülke 2022 FIFA Dünya Kupası'nı kazandı?",o:["Fransa","Brezilya","Arjantin","Hırvatistan"],a:2,c:"Spor"},
+    {id:11,q:"Python hangi tür bir programlama dilidir?",o:["Derlenen","Yorumlanan","Makine","Assembly"],a:1,c:"Teknoloji"},
+    {id:12,q:"WWW'nin açılımı nedir?",o:["Wide World Web","World Wide Web","World Web Wide","Web Wide World"],a:1,c:"Teknoloji"},
+    {id:13,q:"Türkiye Cumhuriyeti hangi yılda kuruldu?",o:["1919","1920","1923","1925"],a:2,c:"Tarih"},
+    {id:14,q:"Işığın boşluktaki hızı yaklaşık ne kadardır?",o:["200.000 km/s","250.000 km/s","300.000 km/s","350.000 km/s"],a:2,c:"Bilim"},
+    {id:15,q:"Nil Nehri hangi ülkede denize dökülür?",o:["Sudan","Etiyopya","Mısır","Libya"],a:2,c:"Coğrafya"},
+    // ÇOCUKLAR - 1. Sınıf Türkçe
+    {id:101,q:"'Araba' kelimesinde kaç hece vardır?",o:["1","2","3","4"],a:2,c:"1. Sınıf|Türkçe"},
+    {id:102,q:"Türk alfabesinde kaç sesli harf vardır?",o:["6","7","8","9"],a:1,c:"1. Sınıf|Türkçe"},
+    {id:103,q:"Aşağıdakilerden hangisi büyük harf ile başlamalıdır?",o:["masa","kalem","ankara","defter"],a:2,c:"1. Sınıf|Türkçe"},
+    // 1. Sınıf Matematik
+    {id:111,q:"5 + 3 = ?",o:["7","8","9","6"],a:1,c:"1. Sınıf|Matematik"},
+    {id:112,q:"10 - 4 = ?",o:["5","6","7","4"],a:1,c:"1. Sınıf|Matematik"},
+    {id:113,q:"2 + 2 + 2 = ?",o:["4","5","6","7"],a:2,c:"1. Sınıf|Matematik"},
+    // 2. Sınıf Matematik
+    {id:121,q:"15 + 8 = ?",o:["21","22","23","24"],a:2,c:"2. Sınıf|Matematik"},
+    {id:122,q:"30 - 12 = ?",o:["16","17","18","19"],a:2,c:"2. Sınıf|Matematik"},
+    {id:123,q:"4 x 3 = ?",o:["10","11","12","13"],a:2,c:"2. Sınıf|Matematik"},
+    // 2. Sınıf Türkçe
+    {id:131,q:"'Okul' kelimesinin zıt anlamlısı nedir?",o:["Ev","Bahçe","Sınıf","Yol"],a:0,c:"2. Sınıf|Türkçe"},
+    {id:132,q:"Cümle hangi işaret ile biter?",o:["Virgül","Nokta","İki nokta","Soru işareti"],a:1,c:"2. Sınıf|Türkçe"},
+    // 3. Sınıf Matematik
+    {id:141,q:"125 + 75 = ?",o:["180","190","200","210"],a:2,c:"3. Sınıf|Matematik"},
+    {id:142,q:"7 x 8 = ?",o:["54","56","58","60"],a:1,c:"3. Sınıf|Matematik"},
+    {id:143,q:"100'ün yarısı kaçtır?",o:["25","40","50","60"],a:2,c:"3. Sınıf|Matematik"},
+    // 3. Sınıf Fen
+    {id:151,q:"Bitkiler büyümek için neye ihtiyaç duyar?",o:["Su, Toprak ve Güneş","Sadece Su","Sadece Toprak","Sadece Güneş"],a:0,c:"3. Sınıf|Fen Bilimleri"},
+    {id:152,q:"Hangi hayvan memelilerden değildir?",o:["Balina","Yarasa","Kaplumbağa","Yunus"],a:2,c:"3. Sınıf|Fen Bilimleri"},
+    // 4. Sınıf Matematik
+    {id:161,q:"250 x 4 = ?",o:["900","1000","1100","800"],a:1,c:"4. Sınıf|Matematik"},
+    {id:162,q:"144 ÷ 12 = ?",o:["10","11","12","13"],a:2,c:"4. Sınıf|Matematik"},
+    // 5. Sınıf Matematik
+    {id:171,q:"Bir üçgenin iç açıları toplamı kaç derecedir?",o:["90°","120°","180°","360°"],a:2,c:"5. Sınıf|Matematik"},
+    {id:172,q:"3/4 + 1/4 = ?",o:["1/2","3/4","1","2"],a:2,c:"5. Sınıf|Matematik"},
+    // 5. Sınıf İngilizce
+    {id:181,q:"'Elma' İngilizce'de nasıl söylenir?",o:["Orange","Banana","Apple","Peach"],a:2,c:"5. Sınıf|İngilizce"},
+    {id:182,q:"What color is the sky?",o:["Green","Red","Blue","Yellow"],a:2,c:"5. Sınıf|İngilizce"}
+  ];
+}
+
+// ==================== OTURUM & BAŞLANGIC ====================
+let currentUser=null;
+let currentMode=null; // 'kids' | 'adult'
+let currentGrade=null;
+let quizState=null;
+let activeChatUser=null;
+let audioCtx=null;
+
+function initAudio(){
+  if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch{}}
+}
+function playSound(f,t,d){
+  if(!audioCtx)return;if(audioCtx.state==='suspended')audioCtx.resume();
+  try{const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.type=t;o.frequency.value=f;g.gain.setValueAtTime(0.08,audioCtx.currentTime);
+    o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d)}catch{}
+}
+const sounds={
+  tick:()=>playSound(400,'sine',0.04),
+  win:()=>{playSound(523,'sine',0.1);setTimeout(()=>playSound(659,'sine',0.15),100);setTimeout(()=>playSound(784,'sine',0.2),220)},
+  fail:()=>playSound(150,'sawtooth',0.3)
+};
+
+function initApp(){
+  // Store yoksa oluştur
+  if(!LS.get(STORE_KEY))setStore(buildDefault());
+  // Duyuru kontrolü
+  const s=getStore();
+  if(s.announcement&&s.announcement.active&&s.announcement.text){
+    document.getElementById('annText').textContent=s.announcement.text;
+    document.getElementById('annBanner').classList.remove('hidden');
+  }
+  // Oturum
+  const sid=LS.get('ailecebil_v1_session');
+  if(sid){
+    const u=getStore().users.find(u=>u.id===sid);
+    if(u&&!u.b){currentUser=u;renderNavBar();renderAuthPage();showPage('modePage');return}
+  }
+  renderAuthPage();
+  showPage('authPage');
+}
+
+// ==================== AUTH ====================
+function switchAuthTab(mode){
+  document.querySelectorAll('#authTabs .tab-btn').forEach((b,i)=>b.classList.toggle('active',
+    (mode==='login'&&i===0)||(mode==='register'&&i===1)));
+  renderAuthPage(mode);
+}
+
+function renderAuthPage(mode='login'){
+  const isLogin=mode==='login';
+  document.getElementById('authContent').innerHTML=`
+    ${isLogin?`
+      <input type="text" class="inp" id="authUser" placeholder="Kullanıcı adı" autocomplete="username">
+      <input type="password" class="inp" id="authPass" placeholder="Şifre" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="btn btn-primary" onclick="doLogin()">🚀 Giriş Yap</button>
+    `:`
+      <input type="text" class="inp" id="authUser" placeholder="Kullanıcı adı (en az 3 karakter)">
+      <input type="password" class="inp" id="authPass" placeholder="Şifre (en az 4 karakter)">
+      <input type="password" class="inp" id="authPass2" placeholder="Şifreyi tekrar girin" onkeydown="if(event.key==='Enter')doRegister()">
+      <button class="btn btn-ok" onclick="doRegister()">✅ Kayıt Ol</button>
+    `}
+    <div id="authMsg" class="info-msg"></div>`;
+}
+
+function doLogin(){
+  initAudio();
+  const u=(document.getElementById('authUser')?.value||'').trim();
+  const p=(document.getElementById('authPass')?.value||'');
+  if(!u||!p){showMsg('authMsg','❌ Tüm alanları doldurun!','err');return}
+  const s=getStore();
+  const found=s.users.find(x=>x.u.toLowerCase()===u.toLowerCase()&&x.p===p);
+  if(!found){showMsg('authMsg','❌ Kullanıcı adı veya şifre hatalı!','err');return}
+  if(found.b){showMsg('authMsg','🚫 Hesabınız yasaklanmıştır!','err');return}
+  currentUser=found;LS.set('ailecebil_v1_session',found.id);
+  renderNavBar();showPage('modePage');
+}
+
+function doRegister(){
+  const u=(document.getElementById('authUser')?.value||'').trim();
+  const p=(document.getElementById('authPass')?.value||'');
+  const p2=(document.getElementById('authPass2')?.value||'');
+  if(!u||!p||!p2){showMsg('authMsg','❌ Tüm alanları doldurun!','err');return}
+  if(u.length<3){showMsg('authMsg','❌ Kullanıcı adı en az 3 karakter!','err');return}
+  if(p.length<4){showMsg('authMsg','❌ Şifre en az 4 karakter!','err');return}
+  if(p!==p2){showMsg('authMsg','❌ Şifreler eşleşmiyor!','err');return}
+  const s=getStore();
+  if(s.users.find(x=>x.u.toLowerCase()===u.toLowerCase())){showMsg('authMsg','❌ Bu kullanıcı adı alınmış!','err');return}
+  const newU={id:'u_'+Date.now(),u,p,s:0,pl:0,c:0,w:0,adm:false,b:false,m:[]};
+  s.users.push(newU);setStore(s);
+  currentUser=newU;LS.set('ailecebil_v1_session',newU.id);
+  renderNavBar();showPage('modePage');
+}
+
+function doLogout(){
+  if(!confirm('Çıkış yapmak istediğinize emin misiniz?'))return;
+  currentUser=null;currentMode=null;currentGrade=null;
+  LS.del('ailecebil_v1_session');
+  renderNavBar();
+  document.getElementById('modeBadge').textContent='';
+  renderAuthPage();showPage('authPage');
+}
+
+// ==================== NAV BAR ====================
+function renderNavBar(){
+  const nav=document.getElementById('navBar');
+  if(!currentUser){nav.innerHTML='';return}
+  nav.innerHTML=`
+    <span style="color:white;font-weight:800;font-size:.88em">👤 ${esc(currentUser.u)}</span>
+    <button class="btn btn-gray btn-sm" onclick="showPage('profilePage');renderProfile()">Profil</button>
+    ${currentUser.adm?`<button class="btn btn-danger btn-sm" onclick="openAdmin()">⚙️ Admin</button>`:''}
+    <button class="btn btn-danger btn-sm" onclick="doLogout()">Çıkış</button>
+  `;
+}
+
+// ==================== MOD SEÇİCİ ====================
+function selectMode(mode){
+  if(!currentUser){showPage('authPage');return}
+  currentMode=mode;
+  document.body.classList.toggle('kids-mode',mode==='kids');
+  document.getElementById('modeBadge').textContent=mode==='kids'?'🧒 Çocuk Modu':'🧑 Büyük Modu';
+  if(mode==='kids'){showPage('gradePage');renderGrades()}
+  else{showPage('homePage');renderHomeAdult()}
+}
+
+// ==================== ÇOCUK: SINIFLAR ====================
+function renderGrades(){
+  const s=getStore();
+  const grid=document.getElementById('gradeGrid');
+  const COLS=['#ff6b9d','#ff9f43','#ffd166','#06d6a0','#118ab2','#073b4c','#7209b7','#3a0ca3'];
+
+  // Her sınıfın toplam soru sayısı
+  const gradeCounts={};
+  s.questions.forEach(q=>{
+    if(q.c.includes('|')){
+      const grade=q.c.split('|')[0];
+      gradeCounts[grade]=(gradeCounts[grade]||0)+1;
+    }
+  });
+
+  grid.innerHTML=s.grades.map((g,i)=>{
+    const qCount=gradeCounts[g.name]||0;
+    return`<div class="grade-btn" style="background:${COLS[i%COLS.length]};color:white"
+      onclick="selectGrade(${i})">
+      <div style="font-size:1.8em">${g.icon}</div>
+      <div style="font-weight:900">${esc(g.name)}</div>
+      <div style="font-size:.72em;opacity:.85;margin-top:4px">${g.subjects.length} konu</div>
+      <div style="font-size:.78em;background:rgba(0,0,0,0.2);border-radius:10px;padding:2px 8px;margin-top:4px;font-weight:800">${qCount} soru</div>
+    </div>`;
+  }).join('');
+
+  // Üstteki stats barı
+  const totalKids=s.questions.filter(q=>q.c.includes('|')).length;
+  const statsEl=document.getElementById('gradePageStats');
+  if(statsEl) statsEl.innerHTML=`
+    <div style="background:#fff0f6;border:1px solid #fda4af;border-radius:12px;padding:10px 16px;
+      display:flex;align-items:center;gap:10px;font-weight:800;font-size:.9em">
+      🧒 Çocuklar bölümünde toplam
+      <span style="font-size:1.4em;color:var(--kids-pr);font-family:'Righteous',cursive">${totalKids}</span>
+      soru var
+    </div>`;
+}
+
+function selectGrade(idx){
+  const s=getStore();
+  currentGrade=idx;
+  document.getElementById('gradeLabel').textContent=s.grades[idx].name;
+  renderSubjects(idx);showPage('subjectPage');
+}
+
+function renderSubjects(gIdx){
+  const s=getStore();
+  const g=s.grades[gIdx];
+  const grid=document.getElementById('subjectGrid');
+  if(!g||!g.subjects.length){grid.innerHTML='<div class="empty"><span class="ei">📚</span>Henüz konu eklenmedi</div>';return}
+
+  // Konu bazlı soru sayıları
+  const subCounts={};
+  s.questions.forEach(q=>{
+    if(q.c.includes('|')){
+      const [grade,sub]=q.c.split('|');
+      if(grade===g.name) subCounts[sub]=(subCounts[sub]||0)+1;
+    }
+  });
+  const totalGrade=Object.values(subCounts).reduce((a,b)=>a+b,0);
+
+  // Sınıf toplam soru sayısı banner
+  const statsEl=document.getElementById('gradeSubStats');
+  if(statsEl) statsEl.innerHTML=`
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:10px 16px;
+      display:flex;align-items:center;gap:10px;font-weight:800;font-size:.9em">
+      📚 ${esc(g.name)} için toplam
+      <span style="font-size:1.4em;color:var(--ok);font-family:'Righteous',cursive">${totalGrade}</span>
+      soru var
+    </div>`;
+
+  grid.innerHTML=g.subjects.map(sub=>{
+    const count=subCounts[sub.name]||0;
+    return`<div class="subject-btn" onclick="startQuiz('${esc(g.name)}|${esc(sub.name)}','${esc(g.name)} - ${esc(sub.name)}')">
+      <span class="si">${sub.icon}</span>
+      <div style="font-weight:900">${esc(sub.name)}</div>
+      <div style="font-size:.78em;color:${count>0?'var(--ok)':'var(--danger)'};font-weight:800;margin-top:4px">
+        ${count>0?count+' soru':'Soru yok'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ==================== BÜYÜKLER: KATEGORİLER ====================
+function renderHomeAdult(){
+  const s=getStore();
+  const qs=s.questions;
+  const counts={};
+  qs.forEach(q=>{if(!q.c.includes('|'))counts[q.c]=(counts[q.c]||0)+1});
+  const totalAdult=qs.filter(q=>!q.c.includes('|')).length;
+
+  const grid=document.getElementById('categoryGrid');
+  grid.innerHTML=s.adultCats.map(cat=>`
+    <div class="cat-btn" onclick="startQuiz('${esc(cat.name)}','${esc(cat.name)}')">
+      <span class="ci">${cat.icon}</span>${esc(cat.name)}
+      <div class="cc" style="color:${(counts[cat.name]||0)>0?'var(--ok)':'var(--danger)'};font-weight:800">${counts[cat.name]||0} soru</div>
+    </div>`).join('');
+
+  document.getElementById('admBtn').classList.toggle('hidden',!(currentUser&&currentUser.adm));
+
+  const totalAll=qs.length;
+  document.getElementById('welcomeZone').innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <span style="font-size:1.8em">👋</span>
+      <div><div style="font-weight:900;font-size:1.1em">Merhaba, ${esc(currentUser.u)}!</div>
+      <div style="color:#94a3b8;font-size:.85em;font-weight:700">${getLevel(currentUser.s).icon} ${getLevel(currentUser.s).name} · ${currentUser.s} Puan</div></div>
+    </div>
+    <div style="background:#fff7ed;border:2px solid var(--pr);border-radius:14px;padding:10px 16px;
+      display:flex;align-items:center;gap:8px;font-weight:800;font-size:.88em;margin-bottom:4px">
+      📚 Büyükler bölümünde toplam
+      <span style="font-size:1.5em;color:var(--pr);font-family:'Righteous',cursive">${totalAdult}</span>
+      soru var
+    </div>`;
+}
+
+// Mod seçim ekranındaki sayaçları güncelle
+function updateModePageCounts(){
+  const s=getStore();
+  const total=s.questions.length;
+  const kids=s.questions.filter(q=>q.c.includes('|')).length;
+  const adult=s.questions.filter(q=>!q.c.includes('|')).length;
+  const tb=document.getElementById('totalQBadge');
+  const kc=document.getElementById('kidsQCount');
+  const ac=document.getElementById('adultQCount');
+  if(tb) tb.textContent=`📚 Toplam ${total} Soru`;
+  if(kc) kc.textContent=`${kids} soru`;
+  if(ac) ac.textContent=`${adult} soru`;
+}
+
+// ==================== SEVİYE SİSTEMİ ====================
+const LEVELS=[
+  {min:0,name:'Acemi',icon:'🌱'},{min:50,name:'Başlangıç',icon:'📗'},
+  {min:150,name:'Gelişen',icon:'⭐'},{min:300,name:'Orta',icon:'🔥'},
+  {min:600,name:'İleri',icon:'💎'},{min:1000,name:'Usta',icon:'🏆'},{min:2000,name:'Efsane',icon:'🦁'}
+];
+function getLevel(score){let l=LEVELS[0];for(const x of LEVELS)if(score>=x.min)l=x;return l}
+function getNextLevel(score){for(const x of LEVELS)if(score<x.min)return x;return null}
+
+// ==================== QUIZ ====================
+const QUIZ_COUNT=10;
+let lastQuizParams=null;
+
+function startQuiz(catKey,label){
+  lastQuizParams={catKey,label};
+  const s=getStore();
+  const pool=s.questions.filter(q=>catKey==='Karma'?true:q.c===catKey);
+  if(pool.length<1){
+    alert(`⚠️ "${label}" kategorisinde henüz soru yok!\nAdmin panelinden soru ekleyin.`);return;
+  }
+  const selected=pool.sort(()=>Math.random()-.5).slice(0,QUIZ_COUNT);
+  quizState={cat:catKey,label,questions:selected,idx:0,score:0,correct:0,wrong:0,timeout:0,timeLeft:20,timer:null};
+  document.getElementById('qMeta').textContent=label;
+  showPage('quizPage');loadQuestion();
+}
+
+function loadQuestion(){
+  if(quizState.idx>=quizState.questions.length){endQuiz();return}
+  const q=quizState.questions[quizState.idx];
+  const tot=quizState.questions.length;
+  const pct=((quizState.idx+1)/tot)*100;
+  document.getElementById('qCounter').textContent=`${quizState.idx+1} / ${tot}`;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('qScore').textContent=`🌟 ${quizState.score}`;
+  document.getElementById('qText').textContent=q.q;
+  const letters=['A','B','C','D'];
+  document.getElementById('choiceArea').innerHTML=q.o.map((opt,i)=>`
+    <button class="choice-btn" onclick="checkAnswer(${i})">
+      <span class="choice-letter">${letters[i]}</span>${esc(opt)}
+    </button>`).join('');
+  startTimer();
+}
+
+function startTimer(){
+  clearInterval(quizState.timer);quizState.timeLeft=20;updateTimerUI();
+  quizState.timer=setInterval(()=>{
+    quizState.timeLeft--;updateTimerUI();sounds.tick();
+    if(quizState.timeLeft<=0){clearInterval(quizState.timer);checkAnswer(-1)}
+  },1000);
+}
+
+function updateTimerUI(){
+  const el=document.getElementById('timerRing');
+  document.getElementById('timerTxt').textContent=quizState.timeLeft;
+  el.classList.toggle('timer-low',quizState.timeLeft<=5);
+}
+
+function checkAnswer(idx){
+  clearInterval(quizState.timer);
+  const q=quizState.questions[quizState.idx];
+  document.querySelectorAll('.choice-btn').forEach((b,i)=>{
+    b.disabled=true;b.onclick=null;
+    if(i===q.a)b.classList.add('correct');
+    else if(i===idx)b.classList.add('wrong');
+  });
+  if(idx===q.a){
+    quizState.score+=(10+quizState.timeLeft);quizState.correct++;sounds.win();
+  } else {
+    quizState.wrong++;sounds.fail();
+    document.getElementById('mainWrapper').classList.add('shake');
+    setTimeout(()=>document.getElementById('mainWrapper').classList.remove('shake'),400);
+    if(idx===-1)quizState.timeout++;
+  }
+  setTimeout(()=>{quizState.idx++;loadQuestion()},1300);
+}
+
+function endQuiz(){
+  clearInterval(quizState?.timer);
+  const pct=Math.round((quizState.correct/quizState.questions.length)*100);
+  let icon='💪',title='Devam Et!';
+  if(pct===100){icon='🏆';title='Mükemmel!'}
+  else if(pct>=80){icon='🥇';title='Harika!'}
+  else if(pct>=60){icon='⭐';title='Güzel!'}
+  else if(pct>=40){icon='👍';title='Fena Değil!'}
+  document.getElementById('resIcon').textContent=icon;
+  document.getElementById('resTitle').textContent=title;
+  document.getElementById('resScore').textContent=quizState.score;
+  document.getElementById('resStats').innerHTML=`
+    <div class="stat-box ok"><div class="sv">${quizState.correct}</div><div class="sl">✅ Doğru</div></div>
+    <div class="stat-box bad"><div class="sv">${quizState.wrong}</div><div class="sl">❌ Yanlış</div></div>
+    <div class="stat-box"><div class="sv">${quizState.timeout}</div><div class="sl">⏱️ Süre</div></div>
+    <div class="stat-box"><div class="sv" style="color:var(--warn)">%${pct}</div><div class="sl">Başarı</div></div>`;
+  // Level up
+  const lvlUpEl=document.getElementById('resLevelUp');
+  if(currentUser){
+    const oldLvl=getLevel(currentUser.s);
+    const s=getStore();
+    const u=s.users.find(x=>x.id===currentUser.id);
+    if(u){u.s+=quizState.score;u.pl++;u.c+=quizState.correct;u.w+=quizState.wrong;setStore(s);currentUser=u;LS.set('ailecebil_v1_session',u.id)}
+    const newLvl=getLevel(currentUser.s);
+    if(oldLvl.name!==newLvl.name){lvlUpEl.style.display='';lvlUpEl.textContent=`🎉 Seviye atladın! ${oldLvl.icon} → ${newLvl.icon} ${newLvl.name}!`}
+    else lvlUpEl.style.display='none';
+  } else lvlUpEl.style.display='none';
+  showPage('resultPage');
+}
+
+function replayQuiz(){if(lastQuizParams)startQuiz(lastQuizParams.catKey,lastQuizParams.label)}
+function quitQuiz(){if(confirm('Quizden çıkmak istiyor musunuz?')){clearInterval(quizState?.timer);quizState=null;goHome()}}
+
+// ==================== PROFIL ====================
+function renderProfile(){
+  if(!currentUser)return;
+  const lvl=getLevel(currentUser.s);
+  const next=getNextLevel(currentUser.s);
+  document.getElementById('profStats').innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--pr2));
+        display:flex;align-items:center;justify-content:center;font-size:1.5em;font-weight:900;color:white">
+        ${currentUser.u[0].toUpperCase()}</div>
+      <div><div style="font-weight:900;font-size:1.1em">${esc(currentUser.u)}</div>
+        <div style="font-size:.82em;color:#64748b">${lvl.icon} ${lvl.name}
+          ${next?` · ${next.min-currentUser.s} puan kaldı (${next.icon} ${next.name})`:'· Maksimum Seviye!'}</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">
+      <div style="background:white;padding:10px;border-radius:10px"><div style="font-weight:900;color:var(--pr);font-size:1.3em">${currentUser.s}</div><div style="font-size:.75em;color:#94a3b8;font-weight:700">Puan</div></div>
+      <div style="background:white;padding:10px;border-radius:10px"><div style="font-weight:900;font-size:1.3em">${currentUser.pl}</div><div style="font-size:.75em;color:#94a3b8;font-weight:700">Oyun</div></div>
+      <div style="background:white;padding:10px;border-radius:10px"><div style="font-weight:900;color:var(--ok);font-size:1.3em">${currentUser.c}</div><div style="font-size:.75em;color:#94a3b8;font-weight:700">✅ Doğru</div></div>
+      <div style="background:white;padding:10px;border-radius:10px"><div style="font-weight:900;color:var(--danger);font-size:1.3em">${currentUser.w}</div><div style="font-size:.75em;color:#94a3b8;font-weight:700">❌ Yanlış</div></div>
+    </div>`;
+  renderUserChat();
+}
+
+function changePass(){
+  const p=document.getElementById('newPass').value;
+  if(p.length<4){alert('Şifre en az 4 karakter olmalı!');return}
+  const s=getStore();const u=s.users.find(x=>x.id===currentUser.id);
+  u.p=p;setStore(s);currentUser=u;document.getElementById('newPass').value='';
+  alert('✅ Şifre güncellendi!');
+}
+
+// ==================== MESAJLAŞMA ====================
+function sendMsg(role){
+  const inpId=role==='user'?'uMsgInp':'aMsgInp';
+  const inp=document.getElementById(inpId);
+  if(!inp||!inp.value.trim())return;
+  const text=inp.value.trim();
+  const s=getStore();
+  const targetUser=role==='user'?s.users.find(x=>x.id===currentUser.id):s.users.find(x=>x.id===activeChatUser);
+  if(!targetUser)return;
+  targetUser.m.push({f:role,t:text,d:new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),r:false});
+  setStore(s);
+  if(role==='user'){currentUser=targetUser;inp.value='';renderUserChat();updateMsgBadge()}
+  else{inp.value='';openAdminChat(activeChatUser);renderConvList()}
+}
+
+function renderUserChat(){
+  const el=document.getElementById('userMsgThread');if(!el)return;
+  const s=getStore();const u=s.users.find(x=>x.id===currentUser.id);
+  if(!u||!u.m.length){el.innerHTML='<div class="empty"><span class="ei">💬</span>Admin\'e mesaj atabilirsiniz</div>';return}
+  el.innerHTML=u.m.map(m=>`
+    <div class="${m.f==='user'?'b-right':''}">
+      <div class="bubble-name">${m.f==='user'?'Sen':'🛡️ Admin'} · ${m.d}</div>
+      <div class="bubble ${m.f==='user'?'me':'them'}">${esc(m.t)}</div>
+    </div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+function renderConvList(){
+  const s=getStore();
+  const players=s.users.filter(u=>!u.adm&&u.m.length>0);
+  const el=document.getElementById('convList');if(!el)return;
+  if(!players.length){el.innerHTML='<div class="empty"><span class="ei">💬</span>Mesaj yok</div>';return}
+  el.innerHTML=players.map(u=>{
+    const unread=u.m.filter(m=>m.f==='user'&&!m.r).length;
+    return`<div style="padding:9px 12px;background:${activeChatUser===u.id?'#ede9fe':'white'};
+      border:1px solid ${activeChatUser===u.id?'var(--pr)':'#e2e8f0'};border-radius:10px;
+      margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.15s"
+      onclick="openAdminChat('${u.id}')">
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--pr);color:white;
+        display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0">${u.u[0].toUpperCase()}</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:800;font-size:.9em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${esc(u.u)}</div>
+      <div style="font-size:.72em;color:#94a3b8">${u.m.length} mesaj</div></div>
+      ${unread>0?`<span class="badge">${unread}</span>`:''}
+    </div>`;
+  }).join('');
+}
+
+function openAdminChat(uid){
+  activeChatUser=uid;
+  const s=getStore();const u=s.users.find(x=>x.id===uid);if(!u)return;
+  // Okundu işaretle
+  u.m.forEach(m=>{if(m.f==='user')m.r=true});setStore(s);
+  renderConvList();updateMsgBadge();
+  document.getElementById('chatPanel').innerHTML=`
+    <div style="font-weight:900;margin-bottom:10px">💬 ${esc(u.u)}</div>
+    <div class="msg-thread" id="adminMsgThread"></div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <input type="text" class="inp" id="aMsgInp" style="margin:0;flex:1" placeholder="Yanıt yaz..." onkeydown="if(event.key==='Enter')sendMsg('admin')">
+      <button class="btn btn-primary" style="width:auto" onclick="sendMsg('admin')">Gönder</button>
+      <button class="btn btn-danger btn-sm" onclick="clearChat('${uid}')">🗑️</button>
+    </div>`;
+  const thread=document.getElementById('adminMsgThread');
+  thread.innerHTML=u.m.map(m=>`
+    <div class="${m.f==='admin'?'b-right':''}">
+      <div class="bubble-name">${m.f==='admin'?'🛡️ Sen':'👤 '+esc(u.u)} · ${m.d}</div>
+      <div class="bubble ${m.f==='admin'?'me':'them'}">${esc(m.t)}</div>
+    </div>`).join('');
+  thread.scrollTop=thread.scrollHeight;
+}
+
+function clearChat(uid){
+  if(!confirm('Bu kullanıcının tüm mesajları silinsin mi?'))return;
+  const s=getStore();const u=s.users.find(x=>x.id===uid);
+  if(u){u.m=[];setStore(s)}
+  activeChatUser=null;
+  document.getElementById('chatPanel').innerHTML='<div class="empty"><span class="ei">💬</span>Konuşma seçin</div>';
+  renderConvList();updateMsgBadge();
+}
+
+function updateMsgBadge(){
+  const s=getStore();
+  const count=s.users.reduce((n,u)=>n+u.m.filter(m=>m.f==='user'&&!m.r).length,0);
+  const badge=document.getElementById('msgBadge');
+  if(badge){badge.textContent=count;badge.style.display=count>0?'inline-flex':'none'}
+}
+
+// ==================== LİDERLİK ====================
+function renderLeader(){
+  const s=getStore();
+  const sorted=[...s.users].filter(u=>!u.adm).sort((a,b)=>b.s-a.s).slice(0,15);
+  const medals=['🥇','🥈','🥉'];
+  document.getElementById('leaderList').innerHTML=sorted.length?sorted.map((u,i)=>`
+    <div class="lb-row">
+      <div class="lb-rank">${medals[i]||i+1}</div>
+      <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--pr2));
+        color:white;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0">
+        ${u.u[0].toUpperCase()}</div>
+      <div class="lb-name">${esc(u.u)}<div style="font-size:.75em;color:#94a3b8">${getLevel(u.s).icon} ${getLevel(u.s).name}</div></div>
+      <div class="lb-score">${u.s} P</div>
+    </div>`).join(''):'<div class="empty"><span class="ei">🏆</span>Henüz skor yok</div>';
+}
+
+// ==================== ADMIN ====================
+function openAdmin(){
+  showPage('adminPage');
+  renderUsers();updateMsgBadge();refreshCatSelects();renderQList();renderCatStructure();
+}
+
+function setTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='tMsgs'){renderConvList();activeChatUser=null;document.getElementById('chatPanel').innerHTML='<div class="empty"><span class="ei">💬</span>Konuşma seçin</div>'}
+  if(id==='tQs'){renderQList();refreshCatSelects()}
+  if(id==='tCats'){renderCatStructure();refreshGradeSelect()}
+}
+
+// ==================== KULLANICI YÖNETİMİ ====================
+function renderUsers(){
+  const s=getStore();
+  const search=(document.getElementById('userSearch')?.value||'').toLowerCase();
+  const players=s.users.filter(u=>!u.adm&&u.u.toLowerCase().includes(search));
+  const el=document.getElementById('admUserList');
+  if(!el)return;
+  if(!players.length){el.innerHTML='<div class="empty"><span class="ei">👥</span>Oyuncu bulunamadı</div>';return}
+  el.innerHTML=players.map(u=>`
+    <div class="user-row">
+      <div class="uname">${esc(u.u)} ${u.b?'<span style="color:var(--danger);font-size:.75em">🚫 Banlı</span>':''}</div>
+      <div class="umeta">${u.s}P · ${u.pl} oyun · ✅${u.c} ❌${u.w}</div>
+      <div class="uactions">
+        <button class="btn btn-sm ${u.b?'btn-ok':'btn-warn'}" onclick="toggleBan('${u.id}')">${u.b?'✅ Aç':'🚫 Ban'}</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function toggleBan(uid){
+  const s=getStore();const u=s.users.find(x=>x.id===uid);
+  if(u&&!u.adm){u.b=!u.b;setStore(s);renderUsers()}
+}
+
+function deleteUser(uid){
+  if(!confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?'))return;
+  const s=getStore();s.users=s.users.filter(x=>x.id!==uid);setStore(s);renderUsers();renderConvList();
+}
+
+// ==================== KATEGORİ YÖNETİMİ ====================
+function addAdultCategory(){
+  const name=document.getElementById('newAdultCat').value.trim();
+  const icon=document.getElementById('newAdultIcon').value.trim()||'📌';
+  if(!name){showMsg('adultCatMsg','❌ Kategori adı boş olamaz!','err');return}
+  const s=getStore();
+  if(s.adultCats.find(c=>c.name===name)){showMsg('adultCatMsg','❌ Bu kategori zaten var!','err');return}
+  s.adultCats.push({name,icon});setStore(s);
+  document.getElementById('newAdultCat').value='';document.getElementById('newAdultIcon').value='';
+  showMsg('adultCatMsg',`✅ "${name}" kategorisi eklendi!`,'ok');
+  renderCatStructure();refreshCatSelects();
+}
+
+function deleteAdultCat(name){
+  if(!confirm(`"${name}" kategorisini silmek istediğinize emin misiniz?`))return;
+  const s=getStore();s.adultCats=s.adultCats.filter(c=>c.name!==name);setStore(s);
+  renderCatStructure();refreshCatSelects();
+}
+
+function addGrade(){
+  const name=document.getElementById('newGradeName').value.trim();
+  const icon=document.getElementById('newGradeIcon').value.trim()||'📚';
+  if(!name){showMsg('gradeCatMsg','❌ Sınıf adı boş olamaz!','err');return}
+  const s=getStore();
+  if(s.grades.find(g=>g.name===name)){showMsg('gradeCatMsg','❌ Bu sınıf zaten var!','err');return}
+  s.grades.push({name,icon,subjects:[]});setStore(s);
+  document.getElementById('newGradeName').value='';document.getElementById('newGradeIcon').value='';
+  showMsg('gradeCatMsg',`✅ "${name}" sınıfı eklendi!`,'ok');
+  renderCatStructure();refreshGradeSelect();
+}
+
+function deleteGrade(name){
+  if(!confirm(`"${name}" sınıfını ve tüm konularını silmek istediğinize emin misiniz?`))return;
+  const s=getStore();s.grades=s.grades.filter(g=>g.name!==name);setStore(s);
+  renderCatStructure();refreshGradeSelect();
+}
+
+function addSubject(){
+  const gName=document.getElementById('subjectGradeSelect').value;
+  const name=document.getElementById('newSubjectName').value.trim();
+  const icon=document.getElementById('newSubjectIcon').value.trim()||'📚';
+  if(!gName||!name){showMsg('subjectMsg','❌ Sınıf ve konu adını doldurun!','err');return}
+  const s=getStore();
+  const g=s.grades.find(x=>x.name===gName);if(!g)return;
+  if(g.subjects.find(sub=>sub.name===name)){showMsg('subjectMsg','❌ Bu konu zaten var!','err');return}
+  g.subjects.push({name,icon});setStore(s);
+  document.getElementById('newSubjectName').value='';document.getElementById('newSubjectIcon').value='';
+  showMsg('subjectMsg',`✅ "${name}" konusu "${gName}" sınıfına eklendi!`,'ok');
+  renderCatStructure();refreshCatSelects();
+}
+
+function deleteSubject(gradeName,subName){
+  if(!confirm(`"${subName}" konusunu silmek istiyor musunuz?`))return;
+  const s=getStore();const g=s.grades.find(x=>x.name===gradeName);
+  if(g)g.subjects=g.subjects.filter(sub=>sub.name!==subName);
+  setStore(s);renderCatStructure();refreshCatSelects();
+}
+
+function refreshGradeSelect(){
+  const s=getStore();
+  const sel=document.getElementById('subjectGradeSelect');if(!sel)return;
+  sel.innerHTML=s.grades.map(g=>`<option value="${esc(g.name)}">${g.icon} ${esc(g.name)}</option>`).join('');
+}
+
+function refreshCatSelects(){
+  const s=getStore();
+  // Soru ekleme dropdown için tüm kategorileri topla
+  const adultOpts=s.adultCats.map(c=>`<option value="${esc(c.name)}">${c.icon} ${esc(c.name)}</option>`).join('');
+  const kidsOpts=s.grades.map(g=>g.subjects.map(sub=>`<option value="${esc(g.name)}|${esc(sub.name)}">${g.icon} ${esc(g.name)} → ${sub.icon} ${esc(sub.name)}</option>`).join('')).join('');
+  const allOpts=`<optgroup label="🧑 Büyükler">${adultOpts}</optgroup><optgroup label="🧒 Çocuklar">${kidsOpts}</optgroup>`;
+  const nqCat=document.getElementById('nq_cat');if(nqCat)nqCat.innerHTML=allOpts;
+  // Filtre dropdown
+  const qf=document.getElementById('qCatFilter');
+  if(qf)qf.innerHTML='<option value="">Tümü</option>'+`<optgroup label="🧑 Büyükler">${adultOpts}</optgroup><optgroup label="🧒 Çocuklar">${kidsOpts}</optgroup>`;
+}
+
+function renderCatStructure(){
+  const s=getStore();
+  let html='';
+  // Büyükler
+  html+=`<div style="margin-bottom:14px">
+    <div style="font-weight:900;color:var(--pr);margin-bottom:8px">🧑 Büyükler Kategorileri</div>`;
+  const counts={};s.questions.forEach(q=>{if(!q.c.includes('|'))counts[q.c]=(counts[q.c]||0)+1});
+  html+=s.adultCats.map(c=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f1f5f9;border-radius:10px;margin-bottom:5px">
+      <span>${c.icon}</span><span style="flex:1;font-weight:700">${esc(c.name)}</span>
+      <span style="font-size:.78em;color:#94a3b8;font-weight:700">${counts[c.name]||0} soru</span>
+      <button class="btn btn-danger btn-sm" onclick="deleteAdultCat('${esc(c.name)}')">🗑️</button>
+    </div>`).join('');
+  html+='</div><div class="divider"></div>';
+  // Çocuklar
+  html+=`<div><div style="font-weight:900;color:var(--kids-pr);margin-bottom:8px">🧒 Çocuklar Sınıf & Konular</div>`;
+  const kidCounts={};s.questions.forEach(q=>{if(q.c.includes('|'))kidCounts[q.c]=(kidCounts[q.c]||0)+1});
+  html+=s.grades.map(g=>`
+    <div style="background:#fff0f6;border:1px solid #fda4af;border-radius:12px;padding:10px 12px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span>${g.icon}</span><span style="flex:1;font-weight:900">${esc(g.name)}</span>
+        <button class="btn btn-danger btn-sm" onclick="deleteGrade('${esc(g.name)}')">🗑️ Sınıfı Sil</button>
+      </div>
+      ${g.subjects.map(sub=>`
+        <div style="display:flex;align-items:center;gap:7px;padding:6px 10px;background:white;border-radius:8px;margin-bottom:4px">
+          <span>${sub.icon}</span><span style="flex:1;font-size:.9em;font-weight:700">${esc(sub.name)}</span>
+          <span style="font-size:.72em;color:#94a3b8">${kidCounts[g.name+'|'+sub.name]||0} soru</span>
+          <button class="btn btn-danger btn-sm" onclick="deleteSubject('${esc(g.name)}','${esc(sub.name)}')">🗑️</button>
+        </div>`).join('')}
+      ${!g.subjects.length?'<div style="font-size:.82em;color:#94a3b8;padding:6px">Henüz konu yok</div>':''}
+    </div>`).join('');
+  html+='</div>';
+  document.getElementById('catStructure').innerHTML=html;
+}
+
+// ==================== SORU YÖNETİMİ ====================
+function addQuestion(){
+  const q=document.getElementById('nq_q').value.trim();
+  const a=document.getElementById('nq_a').value.trim();
+  const b=document.getElementById('nq_b').value.trim();
+  const c=document.getElementById('nq_c').value.trim();
+  const d=document.getElementById('nq_d').value.trim();
+  const correct=parseInt(document.getElementById('nq_correct').value);
+  const cat=document.getElementById('nq_cat').value;
+  if(!q||!a||!b||!c||!d){showMsg('nqMsg','❌ Tüm alanları doldurun!','err');return}
+  const s=getStore();
+  if(!s.nextId||typeof s.nextId!=='number') s.nextId=5000;
+  s.nextId++;
+  const newId=s.nextId;
+  s.questions.push({id:newId,q,o:[a,b,c,d],a:correct,c:cat});
+  setStore(s);
+  ['nq_q','nq_a','nq_b','nq_c','nq_d'].forEach(i=>{const el=document.getElementById(i);if(el)el.value=''});
+  showMsg('nqMsg',`✅ Soru eklendi! Toplam: ${s.questions.length}`,'ok');
+  renderQList();
+}
+
+// Geçerli kategorileri listele (toplu ekleme yardımı)
+function showValidCats(){
+  const el=document.getElementById('validCatList');
+  if(!el)return;
+  if(el.style.display!=='none'){el.style.display='none';return}
+  const s=getStore();
+  const adult=s.adultCats.map(c=>`<span style="background:#e0e7ff;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">${c.icon} ${c.name}</span>`).join('');
+  const kids=s.grades.flatMap(g=>g.subjects.map(sub=>`<span style="background:#fce7f3;border-radius:6px;padding:2px 8px;margin:2px;display:inline-block">${g.icon} ${g.name}|${sub.name}</span>`)).join('');
+  el.innerHTML=`<div style="margin-bottom:6px;font-size:.85em;color:#6366f1;font-weight:900">🧑 Büyükler:</div>${adult}<div style="margin:8px 0 6px;font-size:.85em;color:#ff6b9d;font-weight:900">🧒 Çocuklar (Sınıf|Konu formatında):</div>${kids}`;
+  el.style.display='block';
+}
+
+function doBulk(){
+  const raw=document.getElementById('bulkInp').value.trim();
+  if(!raw){showMsg('bulkMsg','❌ JSON verisi girin.','err');return}
+
+  let parsed;
+  try{parsed=JSON.parse(raw)}
+  catch(e){showMsg('bulkMsg','❌ Geçersiz JSON formatı: '+e.message,'err');return}
+
+  if(!Array.isArray(parsed)){showMsg('bulkMsg','❌ JSON bir dizi [] olmalıdır.','err');return}
+  if(parsed.length===0){showMsg('bulkMsg','❌ Dizi boş, en az 1 soru girin.','err');return}
+
+  const s=getStore();
+  // Geçerli tüm kategori adlarını topla
+  const validCats=new Set([
+    ...s.adultCats.map(c=>c.name),
+    ...s.grades.flatMap(g=>g.subjects.map(sub=>g.name+'|'+sub.name))
+  ]);
+
+  let added=0;
+  const errs=[];
+
+  parsed.forEach((item,i)=>{
+    const num=i+1;
+    // Alan kontrolleri
+    if(typeof item.q!=='string'||!item.q.trim()){errs.push(`#${num}: "q" (soru metni) eksik veya hatalı`);return}
+    if(!Array.isArray(item.o)||item.o.length!==4){errs.push(`#${num}: "o" (şıklar) 4 elemanlı dizi olmalı`);return}
+    if(typeof item.a!=='number'||item.a<0||item.a>3){errs.push(`#${num}: "a" (doğru cevap) 0-3 arasında sayı olmalı`);return}
+    if(item.c&&!validCats.has(item.c)){
+      // Kategori var ama geçersiz — yine de varsayılana düş, uyar
+      errs.push(`#${num}: "${item.c}" kategorisi bulunamadı, "Genel Kültür" olarak eklendi`);
+    }
+
+    // ID üret — her soru için güvenli artış
+    if(!s.nextId||typeof s.nextId!=='number') s.nextId=5000;
+    s.nextId++;
+    const newId=s.nextId;
+
+    s.questions.push({
+      id: newId,
+      q: item.q.trim(),
+      o: item.o.map(x=>String(x).trim()),
+      a: item.a,
+      c: (item.c&&validCats.has(item.c))?item.c:'Genel Kültür'
+    });
+    added++;
+  });
+
+  setStore(s);
+
+  let msg=`✅ ${added} soru başarıyla eklendi! Toplam: ${s.questions.length}`;
+  if(errs.length) msg+=`\n⚠️ ${errs.length} uyarı: ${errs.slice(0,3).join(' | ')}`;
+  showMsg('bulkMsg',msg,added>0?'ok':'err');
+
+  if(added>0){
+    document.getElementById('bulkInp').value='';
+    renderQList();
+  }
+}
+
+function resetQuestions(){
+  if(!confirm('Tüm sorular silinip varsayılanlara dönülsün mü?'))return;
+  const s=getStore();s.questions=getDefaultQuestions();setStore(s);renderQList();alert('✅ Sorular sıfırlandı!');
+}
+
+function deleteQuestion(id){
+  if(!confirm('Bu soruyu sil?'))return;
+  const s=getStore();s.questions=s.questions.filter(q=>q.id!==id);setStore(s);renderQList();
+}
+
+function renderQList(){
+  const s=getStore();
+  const search=(document.getElementById('qSearch')?.value||'').toLowerCase();
+  const cat=document.getElementById('qCatFilter')?.value||'';
+  const filtered=s.questions.filter(q=>
+    (!search||q.q.toLowerCase().includes(search))&&(!cat||q.c===cat));
+  const el=document.getElementById('qList');if(!el)return;
+  if(!filtered.length){el.innerHTML='<div class="empty"><span class="ei">📝</span>Soru bulunamadı</div>';return}
+  el.innerHTML=filtered.slice(0,60).map(q=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#f8fafc;
+      border:1px solid #e2e8f0;border-radius:10px;margin-bottom:6px">
+      <div style="flex:1;font-size:.88em;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis" title="${esc(q.q)}">${esc(q.q)}</div>
+      <div style="font-size:.72em;background:#e0e7ff;color:var(--pr);padding:2px 8px;border-radius:20px;font-weight:800;flex-shrink:0;white-space:nowrap">
+        ${esc(q.c.replace('|',' → '))}</div>
+      <button class="btn btn-danger btn-sm" style="padding:5px 8px" onclick="deleteQuestion(${q.id})">🗑️</button>
+    </div>`).join('')+(filtered.length>60?`<p style="text-align:center;color:#94a3b8;padding:8px;font-size:.85em">...ve ${filtered.length-60} soru daha</p>`:'');
+}
+
+// ==================== DUYURU ====================
+function setBroadcast(active){
+  const text=document.getElementById('annInp').value;
+  if(active&&!text){alert('Duyuru metni girin!');return}
+  const s=getStore();s.announcement={text:text||'',active};setStore(s);
+  LS.set('ailecebil_v1_bc',{text,active});
+  const banner=document.getElementById('annBanner');
+  if(active){document.getElementById('annText').textContent=text;banner.classList.remove('hidden')}
+  else banner.classList.add('hidden');
+  alert(active?'✅ Duyuru yayına verildi!':'✅ Duyuru durduruldu.');
+}
+
+// ==================== TERMİNAL ====================
+function runTerminal(){
+  const code=document.getElementById('termInp').value;
+  if(!code){showMsg('termMsg','❌ Komut girin!','err');return}
+  try{
+    // eslint-disable-next-line no-eval
+    eval(code);
+    const s=getStore();setStore(s);
+    showMsg('termMsg','✅ Komut başarıyla çalıştırıldı!','ok');
+  }catch(e){showMsg('termMsg','❌ Hata: '+e.message,'err')}
+}
+
+// ==================== ADMİN AYARLAR ====================
+function changeAdminPass(){
+  const old=document.getElementById('oldPass').value;
+  const n=document.getElementById('newAdminPass').value;
+  const n2=document.getElementById('newAdminPass2').value;
+  if(!old||!n||!n2){showMsg('passMsg','❌ Tüm alanları doldurun!','err');return}
+  const s=getStore();const admin=s.users.find(u=>u.adm);
+  if(admin.p!==old){showMsg('passMsg','❌ Mevcut şifre hatalı!','err');return}
+  if(n.length<4){showMsg('passMsg','❌ Şifre en az 4 karakter!','err');return}
+  if(n!==n2){showMsg('passMsg','❌ Şifreler eşleşmiyor!','err');return}
+  admin.p=n;setStore(s);currentUser=admin;
+  ['oldPass','newAdminPass','newAdminPass2'].forEach(i=>document.getElementById(i).value='');
+  showMsg('passMsg','✅ Admin şifresi güncellendi!','ok');
+}
+
+function nukeAll(){
+  if(!confirm('TÜM veriler silinecek! Emin misiniz?'))return;
+  if(!confirm('Bu işlem GERİ ALINAMAZ! Devam?'))return;
+  LS.del(STORE_KEY);LS.del('ailecebil_v1_session');location.reload();
+}
+
+// ==================== SAYFA YÖNETİMİ ====================
+function showPage(id){
+  document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  if(id==='leaderPage')renderLeader();
+  if(id==='profilePage')renderProfile();
+  if(id==='adminPage')openAdmin();
+  if(id==='modePage')updateModePageCounts();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goHome(){
+  clearInterval(quizState?.timer);quizState=null;
+  if(!currentUser){showPage('authPage');return}
+  showPage('modePage');
+}
+
+// ==================== YARDIMCI ====================
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function showMsg(id,text,type){
+  const el=document.getElementById(id);if(!el)return;
+  el.textContent=text;el.className='info-msg '+type;
+  setTimeout(()=>{if(el.className.includes(type))el.className='info-msg'},5000);
+}
+
+// ==================== BAŞLANGIÇ ====================
+initApp();
+</script>
+
+</body></html>
