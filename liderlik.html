@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏆 Sıralama - Ailece Bil!</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a class="topbar-logo" href="index.html">🏠 Ailece Bil!<span>Beraber düşün, birlikte kazan!</span></a>
+    <div class="topbar-nav" id="navBar"></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <div style="font-family:'Righteous',cursive;font-size:1.6em">🏆 Ailece Sıralama</div>
+      <a href="index.html" class="btn btn-gray btn-sm" style="text-decoration:none">← Ana Sayfa</a>
+    </div>
+
+    <div class="week-tabs">
+      <button class="week-tab active" onclick="switchLeader('all',this)">🌍 Tüm Zamanlar</button>
+      <button class="week-tab" onclick="switchLeader('week',this)">📅 Bu Hafta</button>
+      <button class="week-tab" onclick="switchLeader('day',this)">☀️ Bugün</button>
+    </div>
+
+    <div id="leaderList"></div>
+  </div>
+
+
+  <!-- Online Global Sıralama -->
+  <div class="card" id="onlineLeaderCard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <div style="font-family:'Righteous',cursive;font-size:1.3em">🌍 Online Sıralama</div>
+      <button class="btn btn-gray btn-sm" onclick="loadOnlineScores()">🔄 Yenile</button>
+    </div>
+    <div id="globalLeaderboard">
+      <div style="text-align:center;padding:20px;color:#94a3b8;font-weight:700">⏳ Yükleniyor...</div>
+    </div>
+  </div>
+
+  <!-- Kendi Sırası -->
+  <div id="myRankCard" class="card hidden">
+    <div class="sec-title">📍 Senin Sıran</div>
+    <div id="myRankContent"></div>
+  </div>
+
+</div>
+
+<script src="js/skor-api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/auth.js"></script>
+<script>
+let leaderMode = 'all';
+
+function renderNavBar() {
+  const nav = document.getElementById('navBar');
+  if (!currentUser) { nav.innerHTML = `<a href="index.html" class="btn btn-gray btn-sm" style="text-decoration:none">Giriş Yap</a>`; return; }
+  const lvl = getLevel(currentUser.s);
+  nav.innerHTML = `
+    <span style="color:white;font-weight:800;font-size:.85em">${lvl.icon} ${esc(currentUser.u)}</span>
+    <a href="profil.html" class="btn btn-gray btn-sm" style="text-decoration:none">👤 Profil</a>
+    ${currentUser.adm ? `<a href="admin.html" class="btn btn-danger btn-sm" style="text-decoration:none">⚙️ Admin</a>` : ''}
+  `;
+}
+
+function switchLeader(mode, btn) {
+  leaderMode = mode;
+  document.querySelectorAll('.week-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLeader();
+}
+
+function renderLeader() {
+  const s = getStore();
+  const now = Date.now(), DAY = 86400000, WEEK = 604800000;
+  let users = [...s.users].filter(u => !u.adm);
+  if (leaderMode === 'week') { users = users.filter(u => u.lastPlay && (now - u.lastPlay) < WEEK).sort((a, b) => (b.weekScore || 0) - (a.weekScore || 0)); }
+  else if (leaderMode === 'day') { users = users.filter(u => u.lastPlay && (now - u.lastPlay) < DAY).sort((a, b) => (b.dayScore || 0) - (a.dayScore || 0)); }
+  else users.sort((a, b) => b.s - a.s);
+  users = users.slice(0, 20);
+  const medals = ['🥇', '🥈', '🥉'];
+  const label = leaderMode === 'week' ? 'Bu Hafta' : leaderMode === 'day' ? 'Bugün' : 'Tüm Zamanlar';
+  const el = document.getElementById('leaderList');
+  el.innerHTML = users.length ? users.map((u, i) => {
+    const sc = leaderMode === 'week' ? (u.weekScore || 0) : leaderMode === 'day' ? (u.dayScore || 0) : u.s;
+    const isMe = currentUser && u.id === currentUser.id;
+    return `<div class="lb-row" style="${isMe ? 'background:#fff7ed;border-color:var(--pr)' : ''}">
+      <div class="lb-rank">${medals[i] || (i + 1)}</div>
+      <div class="lb-avatar">${u.u[0].toUpperCase()}</div>
+      <div class="lb-name">${esc(u.u)}${isMe ? ' <span style="color:var(--pr);font-size:.72em">(Sen)</span>' : ''}
+        <div class="lb-sub">${getLevel(u.s).icon} ${getLevel(u.s).name} · ${u.pl} oyun</div>
+      </div>
+      <div class="lb-score">${sc} P</div>
+    </div>`;
+  }).join('') : `<div class="empty"><span class="ei">🏆</span><p>${label} için henüz skor yok</p></div>`;
+
+  // Kendi sırası
+  if (currentUser) {
+    const myRank = users.findIndex(u => u.id === currentUser.id);
+    const myCard = document.getElementById('myRankCard');
+    const myContent = document.getElementById('myRankContent');
+    if (myRank === -1 && myCard && myContent) {
+      const allSorted = [...s.users].filter(u => !u.adm).sort((a, b) => b.s - a.s);
+      const overallRank = allSorted.findIndex(u => u.id === currentUser.id) + 1;
+      myCard.classList.remove('hidden');
+      myContent.innerHTML = `<div class="lb-row" style="border-color:var(--pr);background:#fff7ed">
+        <div class="lb-rank">${overallRank}</div>
+        <div class="lb-avatar">${currentUser.u[0].toUpperCase()}</div>
+        <div class="lb-name">${esc(currentUser.u)} <span style="color:var(--pr);font-size:.72em">(Sen)</span>
+          <div class="lb-sub">${getLevel(currentUser.s).icon} ${getLevel(currentUser.s).name}</div>
+        </div>
+        <div class="lb-score">${currentUser.s} P</div>
+      </div>`;
+    } else if (myCard) { myCard.classList.add('hidden'); }
+  }
+}
+
+function loadOnlineScores() {
+  if (typeof renderGlobalLeaderboard === 'function') {
+    renderGlobalLeaderboard('globalLeaderboard');
+  }
+}
+
+(function init() {
+  initStore();
+  currentUser = getSession();
+  renderNavBar();
+  renderLeader();
+  // Online skorları yükle
+  loadOnlineScores();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚙️ Admin - Ailece Bil!</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a class="topbar-logo" href="index.html">🏠 Ailece Bil!<span>Admin Paneli</span></a>
+    <div class="topbar-nav">
+      <a href="index.html" class="btn btn-gray btn-sm" style="text-decoration:none">← Ana Sayfa</a>
+      <button class="btn btn-danger btn-sm" onclick="doLogout()">Çıkış</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <div style="font-family:'Righteous',cursive;font-size:1.6em;color:var(--pr)">⚙️ Admin Paneli</div>
+      <div class="stat-chips" id="adminStatChips"></div>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="setTab('tPlayers',this)">👥 Oyuncular</button>
+      <button class="tab-btn" onclick="setTab('tMsgs',this)">
+        💬 Mesajlar<span class="tab-badge" id="adminMsgBadge" style="display:none">0</span>
+      </button>
+      <button class="tab-btn" onclick="setTab('tAnn',this)">📢 Duyuru</button>
+      <button class="tab-btn" onclick="setTab('tCats',this)">📁 Kategoriler</button>
+      <button class="tab-btn" onclick="setTab('tQs',this)">📝 Sorular</button>
+      <button class="tab-btn" onclick="setTab('tBulk',this)">📦 Toplu Ekle</button>
+      <button class="tab-btn" onclick="setTab('tTerm',this)">💻 Terminal</button>
+      <button class="tab-btn" onclick="setTab('tSet',this)">🔐 Ayarlar</button>
+    </div>
+
+    <!-- ========== OYUNCULAR ========== -->
+    <div id="tPlayers" class="tab-content active">
+      <input class="inp" id="playerSearch" placeholder="🔍 Oyuncu ara..." oninput="renderPlayers()">
+      <div id="admUserList"></div>
+    </div>
+
+    <!-- ========== MESAJLAR ========== -->
+    <div id="tMsgs" class="tab-content">
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:14px" id="msgLayout">
+        <div>
+          <div class="sec-title">Konuşmalar</div>
+          <div id="convList"></div>
+        </div>
+        <div id="chatPanel">
+          <div class="empty"><span class="ei">💬</span><p>Konuşma seçin</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== DUYURU ========== -->
+    <div id="tAnn" class="tab-content">
+      <div class="a-section">
+        <div class="sec-title">📢 Ana Sayfa Duyurusu</div>
+        <label class="lbl">Başlık (opsiyonel)</label>
+        <input class="inp" id="annTitle" placeholder="Duyuru başlığı">
+        <label class="lbl">Duyuru Metni</label>
+        <textarea class="textarea" id="annBody" rows="3" placeholder="Kayan yazı olarak görünür..."></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ok" style="flex:1" onclick="saveAnnouncement()">💾 Yayına Ver</button>
+          <button class="btn btn-danger" style="width:auto" onclick="clearAnnouncement()">🗑️ Kaldır</button>
+        </div>
+        <div id="annMsg" class="info-msg"></div>
+      </div>
+    </div>
+
+    <!-- ========== KATEGORİLER ========== -->
+    <div id="tCats" class="tab-content">
+      <!-- Büyükler -->
+      <div class="a-section" style="border:1px solid #fed7aa">
+        <div class="sec-title">🧑 Büyükler — Yeni Kategori</div>
+        <div class="row2">
+          <div><label class="lbl">Kategori Adı</label><input class="inp" id="newAdultCat" placeholder="örn: Müzik"></div>
+          <div><label class="lbl">İkon</label><input class="inp" id="newAdultIcon" placeholder="🎵" maxlength="2"></div>
+        </div>
+        <button class="btn btn-primary" onclick="addAdultCategory()">➕ Kategori Ekle</button>
+        <div id="adultCatMsg" class="info-msg"></div>
+      </div>
+      <!-- Yeni Sınıf -->
+      <div class="a-section" style="border:1px solid #fda4af">
+        <div class="sec-title">🧒 Çocuklar — Yeni Sınıf</div>
+        <div class="row2">
+          <div><label class="lbl">Sınıf Adı</label><input class="inp" id="newGradeName" placeholder="örn: 9. Sınıf"></div>
+          <div><label class="lbl">İkon</label><input class="inp" id="newGradeIcon" placeholder="📚" maxlength="2"></div>
+        </div>
+        <button class="btn btn-kids btn-full" onclick="addGrade()">➕ Sınıf Ekle</button>
+        <div id="gradeCatMsg" class="info-msg"></div>
+      </div>
+      <!-- Yeni Konu -->
+      <div class="a-section" style="border:1px solid #86efac">
+        <div class="sec-title">📚 Çocuklar — Yeni Konu/Ders</div>
+        <label class="lbl">Hangi Sınıfa?</label>
+        <select class="select" id="subjectGradeSelect"></select>
+        <div class="row2">
+          <div><label class="lbl">Konu Adı</label><input class="inp" id="newSubjectName" placeholder="örn: Coğrafya"></div>
+          <div><label class="lbl">İkon</label><input class="inp" id="newSubjectIcon" placeholder="🌍" maxlength="2"></div>
+        </div>
+        <button class="btn btn-ok" onclick="addSubject()">➕ Konu Ekle</button>
+        <div id="subjectMsg" class="info-msg"></div>
+      </div>
+      <!-- Mevcut Yapı -->
+      <div class="sec-title" style="margin-top:4px">📋 Mevcut Yapı</div>
+      <div id="catStructure"></div>
+    </div>
+
+    <!-- ========== SORULAR ========== -->
+    <div id="tQs" class="tab-content">
+      <div class="a-section">
+        <div class="sec-title">📝 Yeni Soru Ekle</div>
+        <label class="lbl">Soru Metni</label>
+        <textarea class="textarea" id="nq_q" rows="2" placeholder="Soruyu buraya yazın..." style="resize:vertical"></textarea>
+        <div class="row2">
+          <div><label class="lbl">Şık A</label><input class="inp" id="nq_a" placeholder="A şıkkı"></div>
+          <div><label class="lbl">Şık B</label><input class="inp" id="nq_b" placeholder="B şıkkı"></div>
+          <div><label class="lbl">Şık C</label><input class="inp" id="nq_c" placeholder="C şıkkı"></div>
+          <div><label class="lbl">Şık D</label><input class="inp" id="nq_d" placeholder="D şıkkı"></div>
+        </div>
+        <div class="row2">
+          <div><label class="lbl">Doğru Cevap</label>
+            <select class="select" id="nq_correct">
+              <option value="0">A</option><option value="1">B</option>
+              <option value="2">C</option><option value="3">D</option>
+            </select></div>
+          <div><label class="lbl">Kategori</label>
+            <select class="select" id="nq_cat"></select></div>
+        </div>
+        <button class="btn btn-ok" onclick="addQuestion()">✅ Kaydet</button>
+        <div id="nqMsg" class="info-msg"></div>
+      </div>
+      <div class="sec-title">📋 Soru Listesi</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+        <input class="inp" id="qSearch" style="margin:0;flex:1;min-width:140px" placeholder="🔍 Soru ara..." oninput="renderQList()">
+        <select class="select" id="qCatFilter" style="margin:0;max-width:170px" onchange="renderQList()"><option value="">Tümü</option></select>
+      </div>
+      <div id="qList"></div>
+      <div style="text-align:right;margin-top:10px">
+        <button class="btn btn-danger btn-sm" onclick="resetQuestions()">🔄 Varsayılana Sıfırla</button>
+      </div>
+    </div>
+
+    <!-- ========== TOPLU EKLE ========== -->
+    <div id="tBulk" class="tab-content">
+      <div style="background:#fef3c7;border:1px solid var(--warn);border-radius:10px;padding:12px;margin-bottom:10px;font-size:.85em;font-weight:700;color:#92400e">
+        📌 <b>q</b>=soru · <b>o</b>=4 şık · <b>a</b>=doğru indeks (0-3) · <b>c</b>=kategori adı (tam eşleşmeli)
+      </div>
+      <div class="json-ex">[
+  {
+    "q": "Türkiye'nin başkenti neresidir?",
+    "o": ["İstanbul", "Ankara", "İzmir", "Bursa"],
+    "a": 1,
+    "c": "Genel Kültür"
+  },
+  {
+    "q": "5 + 3 = ?",
+    "o": ["6", "7", "8", "9"],
+    "a": 2,
+    "c": "1. Sınıf|Matematik"
+  }
+]</div>
+      <button class="btn btn-warn btn-sm" style="width:auto;margin-bottom:10px" onclick="showValidCats()">📋 Geçerli Kategori Adlarını Gör</button>
+      <div id="validCatList" style="display:none;background:#f1f5f9;border-radius:10px;padding:10px;margin-bottom:10px;line-height:2"></div>
+      <label class="lbl">JSON Yapıştır</label>
+      <textarea class="textarea" id="bulkJson" rows="10" style="font-family:'Courier New',monospace;font-size:.85em"
+        placeholder='[{"q":"Soru","o":["A","B","C","D"],"a":0,"c":"Genel Kültür"}]'></textarea>
+      <button class="btn btn-primary" onclick="doBulk()">📦 Toplu Yükle</button>
+      <div id="bulkMsg" class="info-msg"></div>
+    </div>
+
+    <!-- ========== TERMİNAL ========== -->
+    <div id="tTerm" class="tab-content">
+      <div style="background:#fee2e2;border:1px solid var(--danger);border-radius:10px;padding:12px;margin-bottom:10px;font-size:.85em;font-weight:700;color:#b91c1c">
+        ⚠️ Bu terminal doğrudan JavaScript çalıştırır. Dikkatli kullanın!
+      </div>
+      <div style="font-size:.8em;color:var(--txt2);margin-bottom:8px;font-weight:700;line-height:1.8">
+        Örnek komutlar:<br>
+        • Puan sıfırla: <code>const s=getStore();s.users.forEach(u=>u.s=0);setStore(s)</code><br>
+        • Admin yap: <code>const s=getStore();s.users.find(x=>x.u==='AD').adm=true;setStore(s)</code><br>
+        • Soru say: <code>alert(getStore().questions.length+' soru var')</code>
+      </div>
+      <div class="terminal">
+        <strong style="color:#00ff41">💻 Sistem Terminali</strong>
+        <textarea id="termInp" placeholder="// Kodu buraya yazın..."></textarea>
+      </div>
+      <button class="btn btn-dark" style="margin-top:8px" onclick="runTerminal()">▶ ÇALIŞTIR</button>
+      <div id="termMsg" class="info-msg"></div>
+    </div>
+
+    <!-- ========== AYARLAR ========== -->
+    <div id="tSet" class="tab-content">
+      <div class="a-section">
+        <div class="sec-title">🔐 Admin Şifre Değiştir</div>
+        <input type="password" class="inp" id="oldPass" placeholder="Mevcut şifre">
+        <input type="password" class="inp" id="newAdminPass" placeholder="Yeni şifre">
+        <input type="password" class="inp" id="newAdminPass2" placeholder="Yeni şifre (tekrar)">
+        <button class="btn btn-danger" onclick="changeAdminPass()">🔑 Şifreyi Değiştir</button>
+        <div id="passMsg" class="info-msg"></div>
+      </div>
+      <div class="a-section">
+        <div class="sec-title">📊 Google Sheets Entegrasyonu</div>
+        <p style="font-size:.82em;color:var(--txt2);font-weight:700;margin-bottom:8px">Apps Script Web App URL'nizi girin. Quiz skorları otomatik kaydedilir.</p>
+        <input class="inp" id="sheetsUrlInp" placeholder="https://script.google.com/macros/s/...">
+        <button class="btn btn-ok" onclick="saveSheetsUrl()">🔗 Sheets'e Bağla</button>
+      </div>
+      <div class="a-section" style="border:1px solid var(--danger)">
+        <div class="sec-title" style="color:var(--danger)">⚠️ Tehlikeli Bölge</div>
+        <button class="btn btn-danger btn-sm" onclick="nukeAll()">🗑️ TÜM VERİLERİ SİL</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/store.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+<script>
+(function init() {
+  initStore();
+  currentUser = getSession();
+  if (!currentUser || !currentUser.adm) {
+    alert('Bu sayfaya erişim için admin yetkisi gereklidir!');
+    window.location.href = 'index.html';
+    return;
+  }
+  // Sheets URL yükle
+  const saved = LS.get(SHEETS_KEY);
+  if (saved && document.getElementById('sheetsUrlInp')) {
+    document.getElementById('sheetsUrlInp').value = saved;
+    SHEETS_URL = saved;
+  }
+  updateAdminStats();
+  renderPlayers();
+  updateAdminMsgBadge();
+  refreshCatSelects();
+  refreshGradeSelect();
+  renderQList();
+  renderCatStructure();
+})();
+</script>
+</body>
+</html>

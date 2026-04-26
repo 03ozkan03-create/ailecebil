@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👤 Profil - Ailece Bil!</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <a class="topbar-logo" href="index.html">🏠 Ailece Bil!<span>Beraber düşün, birlikte kazan!</span></a>
+    <div class="topbar-nav" id="navBar"></div>
+  </div>
+
+  <div id="profileCard" class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-family:'Righteous',cursive;font-size:1.4em">👤 Profilim</div>
+      <div style="display:flex;gap:8px">
+        <a href="index.html" class="btn btn-gray btn-sm" style="text-decoration:none">← Geri</a>
+        <button class="btn btn-danger btn-sm" onclick="doLogout()">Çıkış</button>
+      </div>
+    </div>
+
+    <!-- Avatar & İsim -->
+    <div style="text-align:center;margin-bottom:16px">
+      <div class="prof-avatar" id="profAvatar">?</div>
+      <div style="font-family:'Righteous',cursive;font-size:1.5em" id="profName">...</div>
+      <div id="profLevel" style="margin-top:4px;font-size:.88em;font-weight:800;color:var(--txt2)"></div>
+      <div id="profNextLevel" style="margin-top:3px;font-size:.78em;color:var(--txt3);font-weight:700"></div>
+    </div>
+
+    <!-- İstatistik -->
+    <div class="prof-stats" id="profStats"></div>
+
+    <div class="divider"></div>
+
+    <!-- Rozetler -->
+    <div class="sec-title">🔔 Rozetlerim</div>
+    <div id="badgeZone" class="badge-grid"></div>
+
+    <div class="divider"></div>
+
+    <!-- Performans -->
+    <div class="sec-title">📊 Konu Performansı</div>
+    <div id="perfZone" style="margin-bottom:8px"></div>
+
+    <div class="divider"></div>
+
+    <!-- Mesajlar -->
+    <div class="sec-title">💬 Admin Mesajları</div>
+    <div class="msg-thread" id="userMsgThread"></div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <input type="text" class="inp" id="uMsgInp" style="margin:0;flex:1"
+        placeholder="Admin'e mesaj gönder..." onkeydown="if(event.key==='Enter')sendUserMsg()">
+      <button class="btn btn-primary" style="width:auto" onclick="sendUserMsg()">Gönder</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Şifre Değiştir -->
+    <div class="sec-title">🔑 Şifre Değiştir</div>
+    <input type="password" class="inp" id="newPass" placeholder="Yeni şifre (en az 4 karakter)">
+    <button class="btn btn-primary" onclick="changePass()">💾 Güncelle</button>
+  </div>
+
+</div>
+
+<script src="js/skor-api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/auth.js"></script>
+<script>
+function renderNavBar() {
+  const nav = document.getElementById('navBar');
+  if (!currentUser) { nav.innerHTML = `<a href="index.html" class="btn btn-gray btn-sm" style="text-decoration:none">Giriş Yap</a>`; return; }
+  nav.innerHTML = `
+    <span style="color:white;font-weight:800;font-size:.85em">${esc(currentUser.u)}</span>
+    ${currentUser.adm ? `<a href="admin.html" class="btn btn-danger btn-sm" style="text-decoration:none">⚙️ Admin</a>` : ''}
+    <button class="btn btn-gray btn-sm" onclick="doLogout()">Çıkış</button>
+  `;
+}
+
+function renderProfile() {
+  if (!currentUser) { window.location.href = 'index.html'; return; }
+  const lvl = getLevel(currentUser.s);
+  const next = getNextLevel(currentUser.s);
+
+  document.getElementById('profAvatar').textContent = currentUser.u[0].toUpperCase();
+  document.getElementById('profName').textContent = currentUser.u;
+  document.getElementById('profLevel').textContent = lvl.icon + ' ' + lvl.name;
+  document.getElementById('profNextLevel').textContent = next
+    ? `Sonraki: ${next.icon} ${next.name} (${next.min - currentUser.s} puan kaldı)`
+    : '🦁 Maksimum seviyeye ulaştınız!';
+
+  document.getElementById('profStats').innerHTML = `
+    <div class="prof-stat"><div class="pv" style="color:var(--pr)">${currentUser.s}</div><div class="pl">Puan</div></div>
+    <div class="prof-stat"><div class="pv">${currentUser.pl}</div><div class="pl">Oyun</div></div>
+    <div class="prof-stat"><div class="pv" style="color:var(--ok)">${currentUser.c}</div><div class="pl">✅ Doğru</div></div>
+    <div class="prof-stat"><div class="pv" style="color:var(--danger)">${currentUser.w}</div><div class="pl">❌ Yanlış</div></div>`;
+
+  renderBadges();
+  renderPerformance();
+  renderUserChat();
+}
+
+function renderBadges() {
+  const el = document.getElementById('badgeZone'); if (!el) return;
+  const earned = currentUser.badges || [];
+  el.innerHTML = BADGES.map(b => `
+    <div class="badge-item ${earned.includes(b.id) ? 'earned' : 'locked'}" title="${b.id}">
+      <div class="bi">${b.icon}</div>
+      <div class="bn">${b.name}</div>
+    </div>`).join('');
+}
+
+function renderPerformance() {
+  const el = document.getElementById('perfZone'); if (!el) return;
+  const perf = currentUser.perf || {};
+  const cats = Object.keys(perf);
+  if (!cats.length) {
+    el.innerHTML = '<div style="color:var(--txt3);font-size:.85em;font-weight:700">Quiz oynadıkça burada görünecek.</div>';
+    return;
+  }
+  const colors = ['#f97316','#7c3aed','#22c55e','#3b82f6','#ef4444','#f59e0b'];
+  el.innerHTML = cats.map((cat, i) => {
+    const d = perf[cat];
+    const pct = d.total > 0 ? Math.round((d.correct / d.total) * 100) : 0;
+    return `<div class="perf-row">
+      <div class="perf-label">
+        <span>${esc(cat.replace('|', ' → '))}</span>
+        <span style="color:${pct >= 70 ? 'var(--ok)' : pct >= 40 ? 'var(--warn)' : 'var(--danger)'}">${pct}% (${d.correct}/${d.total})</span>
+      </div>
+      <div class="perf-bar"><div class="perf-fill" style="width:${pct}%;background:${colors[i % colors.length]}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderUserChat() {
+  const el = document.getElementById('userMsgThread'); if (!el) return;
+  const s = getStore(); const u = s.users.find(x => x.id === currentUser.id);
+  if (!u || !u.m || !u.m.length) {
+    el.innerHTML = '<div class="empty" style="padding:16px"><span class="ei">💬</span><p>Henüz mesaj yok. Admin\'e bir şeyler yaz!</p></div>';
+  } else {
+    el.innerHTML = u.m.map(m => `
+      <div class="${m.f === 'user' ? 'b-right' : ''}">
+        <div class="bubble-name">${m.f === 'user' ? 'Sen' : '🛡️ Admin'} · ${m.d || ''}</div>
+        <div class="bubble ${m.f === 'user' ? 'me' : 'them'}">${esc(m.t)}</div>
+      </div>`).join('');
+  }
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendUserMsg() {
+  const inp = document.getElementById('uMsgInp'); if (!inp) return;
+  const text = inp.value.trim(); if (!text) return;
+  const s = getStore(); const u = s.users.find(x => x.id === currentUser.id); if (!u) return;
+  if (!u.m) u.m = [];
+  u.m.push({ f: 'user', t: text, d: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }), r: false });
+  setStore(s); currentUser = u; saveSession(u.id);
+  // Sheets'e de gönder
+  if(typeof sendMessageToSheets==='function') sendMessageToSheets(currentUser.u, text);
+  inp.value = ''; renderUserChat();
+}
+
+(function init() {
+  initStore();
+  currentUser = getSession();
+  if (!currentUser) { window.location.href = 'index.html'; return; }
+  renderNavBar();
+  renderProfile();
+})();
+</script>
+</body>
+</html>
