@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AileceBil - Admin</title><link rel="stylesheet" href="css/style.css"></head><body>
+<div class="container">
+  <h1>🛠️ Yönetim Paneli</h1>
+  <div class="admin-tabs">
+    <button class="admin-tab active" data-tab="tab-q">❓ Sorular</button>
+    <button class="admin-tab" data-tab="tab-u">👥 Kullanıcılar</button>
+    <button class="admin-tab" data-tab="tab-io">📥/📤 JSON</button>
+  </div>
+  <div id="tab-q" class="tab-content active">
+    <h3>Soru Ekle</h3>
+    <form id="add-q-form"><input type="text" id="q-cat" placeholder="Kategori (örn: genel)" required><textarea id="q-text" placeholder="Soru metni" required></textarea><input type="text" id="q-opts" placeholder="Seçenekler (virgülle: A,B,C,D)" required><input type="text" id="q-correct" placeholder="Doğru Cevap" required><button type="submit" class="btn success">Kaydet</button></form>
+    <h3 style="margin-top:24px">Mevcut Sorular</h3><div id="q-list"></div>
+  </div>
+  <div id="tab-u" class="tab-content">
+    <h3>Kullanıcılar</h3>
+    <table><thead><tr><th>Kullanıcı</th><th>Ad</th><th>Rol</th><th>İşlem</th></tr></thead><tbody id="u-body"></tbody></table>
+  </div>
+  <div id="tab-io" class="tab-content">
+    <h3>JSON Yönetimi</h3><p>Statik site olduğu için tarayıcı sunucuya yazamaz. Güncel JSON'u indirip <code>assets/questions/</code> klasörüne kaydedin.</p>
+    <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"><button id="btn-export" class="btn">💾 JSON İndir</button><input type="file" id="import-file" accept=".json" style="display:none"><button onclick="document.getElementById('import-file').click()" class="btn secondary">📤 JSON Yükle</button></div>
+  </div>
+  <button onclick="window.location.href='index.html'" class="btn secondary" style="margin-top:24px">← Çıkış</button>
+</div>
+<script src="js/store.js"></script><script src="js/auth.js"></script><script src="js/ui.js"></script><script src="js/admin.js"></script></body></html>

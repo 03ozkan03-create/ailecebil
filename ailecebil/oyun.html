@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AileceBil - Quiz</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="quiz-header">
+      <span id="progress">Soru 1/10</span>
+      <span id="timer"></span>
+      <span id="score-display">Skor: 0</span>
+    </header>
+
+    <main id="quiz-container">
+      <h2 id="question">Sorular yükleniyor...</h2>
+      <div class="options-grid">
+        <button class="option">A</button>
+        <button class="option">B</button>
+        <button class="option">C</button>
+        <button class="option">D</button>
+      </div>
+      <button id="next-btn" class="btn next" style="display:none;">Sonraki Soru →</button>
+    </main>
+
+    <div id="end-screen" style="display:none;">
+      <h2>🎉 Oyun Bitti!</h2>
+      <p id="final-score">Toplam Skor: 0</p>
+      <div class="end-actions">
+        <button id="retry-btn" class="btn">Tekrar Oyna</button>
+        <button id="leaderboard-btn" class="btn secondary">Sıralamaya Git</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Sırası Önemli -->
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>

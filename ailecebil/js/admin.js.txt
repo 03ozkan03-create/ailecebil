@@ -1,0 +1,54 @@
+const Admin = (() => {
+  let db = Store.get('questions', {}); // { genel: [{soru,secenekler,dogruCevap}], ... }
+
+  const init = () => {
+    if (!Auth.isAdmin()) { UI.showToast('Erişim reddedildi.', 'error'); setTimeout(()=>window.location.href='index.html',1500); return; }
+    UI.initAdminTabs(); renderQ(); renderU();
+
+    document.getElementById('add-q-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const cat = document.getElementById('q-cat').value.trim().toLowerCase();
+      const text = document.getElementById('q-text').value.trim();
+      const opts = document.getElementById('q-opts').value.split(',').map(s=>s.trim()).filter(Boolean);
+      const correct = document.getElementById('q-correct').value.trim();
+      if(opts.length!==4 || !opts.includes(correct)) return UI.showToast('4 seçenek girin ve doğru cevap listeden biri olmalı.','error');
+      if(!db[cat]) db[cat]=[];
+      db[cat].push({soru:text, secenekler:opts, dogruCevap:correct});
+      Store.set('questions', db); renderQ(); e.target.reset(); UI.showToast('Soru eklendi!');
+    });
+
+    document.getElementById('btn-export').addEventListener('click', ()=>{
+      const blob = new Blob([JSON.stringify(db, null, 2)], {type:'application/json'});
+      const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='questions.json'; a.click();
+    });
+
+    document.getElementById('import-file').addEventListener('change', e=>{
+      const file=e.target.files[0]; if(!file)return;
+      const r=new FileReader(); r.onload=ev=>{
+        try{ db=JSON.parse(ev.target.result); Store.set('questions',db); renderQ(); UI.showToast('JSON yüklendi!'); }catch{ UI.showToast('Geçersiz JSON.','error'); }
+      }; r.readAsText(file);
+    });
+  };
+
+  const renderQ = () => {
+    const list=document.getElementById('q-list');
+    list.innerHTML = Object.entries(db).map(([cat,qs])=>`
+      <div style="margin:12px 0;padding:12px;background:var(--bg);border-radius:8px">
+        <strong style="color:var(--primary)">${cat} (${qs.length} soru)</strong>
+        <button class="btn danger" style="float:right;padding:4px 10px;font-size:12px" onclick="Admin.delCat('${cat}')">Kategori Sil</button>
+        ${qs.map((q,i)=>`<div style="margin-top:8px;font-size:14px;color:var(--text-muted)">• ${q.soru.substring(0,50)}... <button onclick="Admin.delQ('${cat}',${i})" style="color:var(--danger);background:none;border:none;cursor:pointer;font-size:12px">[x]</button></div>`).join('')}
+      </div>`).join('') || '<p style="color:var(--text-muted)">Henüz soru yok.</p>';
+  };
+
+  const renderU = () => {
+    const users=Store.get('users',{}), tbody=document.getElementById('u-body');
+    tbody.innerHTML=Object.entries(users).map(([u,d])=>`<tr><td>${u}</td><td>${d.name}</td><td>${d.role}</td><td><button class="btn danger" style="padding:4px 8px;font-size:12px" onclick="Admin.delU('${u}')">Sil</button></td></tr>`).join('');
+  };
+
+  const delQ=(cat,i)=>{if(!confirm('Soru silinsin mi?'))return; db[cat].splice(i,1); if(!db[cat].length)delete db[cat]; Store.set('questions',db); renderQ();};
+  const delCat=(cat)=>{if(!confirm(`"${cat}" kategorisi silinsin mi?`))return; delete db[cat]; Store.set('questions',db); renderQ();};
+  const delU=(u)=>{if(!confirm(`${u} silinsin mi?`))return; const users=Store.get('users',{}); delete users[u]; Store.set('users',users); renderU();};
+
+  return {init, delQ, delCat, delU};
+})();
+document.addEventListener('DOMContentLoaded', Admin.init);

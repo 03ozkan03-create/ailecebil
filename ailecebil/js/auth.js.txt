@@ -1,0 +1,32 @@
+// js/auth.js
+const Auth = (() => {
+  const login = (username, password) => {
+    const users = Store.get('users', {});
+    const user = users[username];
+    if (!user || user.password !== password) return { success: false, msg: 'Geçersiz giriş.' };
+    
+    Store.saveProfile({ name: user.name, role: user.role, scores: user.scores || [] });
+    sessionStorage.setItem('ailecebil_session', username);
+    return { success: true, role: user.role };
+  };
+
+  const register = (username, password, name, role = 'user') => {
+    const users = Store.get('users', {});
+    if (users[username]) return { success: false, msg: 'Bu kullanıcı adı alınmış.' };
+    
+    users[username] = { name, password, role, scores: [] };
+    Store.set('users', users);
+    return { success: true, msg: 'Kayıt başarılı. Giriş yapabilirsiniz.' };
+  };
+
+  const logout = () => {
+    localStorage.removeItem('ailecebil_user');
+    sessionStorage.removeItem('ailecebil_session');
+    window.location.href = 'index.html';
+  };
+
+  const getCurrentUser = () => sessionStorage.getItem('ailecebil_session');
+  const isAdmin = () => Store.getProfile()?.role === 'admin';
+
+  return { login, register, logout, getCurrentUser, isAdmin };
+})();

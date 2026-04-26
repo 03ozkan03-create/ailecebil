@@ -1,0 +1,17 @@
+[
+  {
+    "soru": "Türkiye'nin başkenti neresidir?",
+    "secenekler": ["İstanbul", "Ankara", "İzmir", "Bursa"],
+    "dogruCevap": "Ankara"
+  },
+  {
+    "soru": "Bir yıl kaç haftadır?",
+    "secenekler": ["48", "50", "52", "54"],
+    "dogruCevap": "52"
+  },
+  {
+    "soru": "Dünya'nın en büyük okyanusu hangisidir?",
+    "secenekler": ["Atlas", "Hint", "Pasifik", "Arktik"],
+    "dogruCevap": "Pasifik"
+  }
+]

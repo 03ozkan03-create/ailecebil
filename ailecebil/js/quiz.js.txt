@@ -1,0 +1,165 @@
+// js/quiz.js
+const Quiz = (() => {
+  let questions = [];
+  let currentIndex = 0;
+  let score = 0;
+  let timer = null;
+  let timeLeft = 0;
+  let mode = 'normal';
+  let category = 'Genel';
+  let maxQuestions = 10;
+
+  const ui = {};
+
+  const init = () => {
+    // URL parametrelerini oku
+    const params = new URLSearchParams(window.location.search);
+    category = params.get('cat') || 'Genel';
+    mode = params.get('mod') || 'normal';
+    maxQuestions = mode === 'maraton' ? 30 : mode === 'hizli' ? 5 : 10;
+
+    // DOM referansları
+    ui.container = document.getElementById('quiz-container');
+    ui.questionText = document.getElementById('question');
+    ui.options = document.querySelectorAll('.option');
+    ui.timer = document.getElementById('timer');
+    ui.score = document.getElementById('score-display');
+    ui.progress = document.getElementById('progress');
+    ui.nextBtn = document.getElementById('next-btn');
+    ui.endScreen = document.getElementById('end-screen');
+    ui.finalScore = document.getElementById('final-score');
+    ui.retryBtn = document.getElementById('retry-btn');
+    ui.leaderboardBtn = document.getElementById('leaderboard-btn');
+
+    // Eventler
+    ui.options.forEach(opt => opt.addEventListener('click', handleAnswer));
+    ui.nextBtn.addEventListener('click', nextQuestion);
+    ui.retryBtn.addEventListener('click', () => window.location.reload());
+    ui.leaderboardBtn.addEventListener('click', () => window.location.href = 'liderlik.html');
+
+    loadQuestions();
+  };
+
+  const loadQuestions = () => {
+    const url = `assets/questions/${category}.json`;
+    fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error('JSON yüklenemedi');
+        return res.json();
+      })
+      .then(data => {
+        questions = shuffleArray(data).slice(0, maxQuestions);
+        if (!questions.length) throw new Error('Soru bulunamadı');
+        currentIndex = 0;
+        score = 0;
+        renderQuestion();
+      })
+      .catch(err => {
+        console.error(err);
+        ui.questionText.textContent = '⚠️ Sorular yüklenirken hata oluştu. Lütfen sayfayı yenileyin.';
+        ui.options.forEach(o => o.style.display = 'none');
+      });
+  };
+
+  const renderQuestion = () => {
+    if (currentIndex >= questions.length) return endQuiz();
+
+    const q = questions[currentIndex];
+    ui.questionText.textContent = `${currentIndex + 1}. ${q.soru}`;
+    ui.progress.textContent = `Soru ${currentIndex + 1}/${questions.length}`;
+    ui.score.textContent = `Skor: ${score}`;
+
+    // Seçenekleri karıştır
+    const opts = shuffleArray([...q.secenekler]);
+    ui.options.forEach((opt, i) => {
+      opt.textContent = opts[i];
+      opt.dataset.answer = opts[i];
+      opt.classList.remove('correct', 'wrong', 'disabled');
+      opt.style.pointerEvents = 'auto';
+    });
+
+    // Zamanlayıcı (sadece hızlı mod)
+    if (timer) clearInterval(timer);
+    if (mode === 'hizli') {
+      timeLeft = 15;
+      ui.timer.textContent = `⏱️ ${timeLeft}s`;
+      timer = setInterval(() => {
+        timeLeft--;
+        ui.timer.textContent = `⏱️ ${timeLeft}s`;
+        if (timeLeft <= 0) handleTimeout();
+      }, 1000);
+    } else {
+      ui.timer.textContent = '';
+    }
+
+    ui.nextBtn.style.display = 'none';
+  };
+
+  const handleAnswer = (e) => {
+    const selected = e.currentTarget;
+    if (selected.classList.contains('disabled')) return;
+
+    if (timer) clearInterval(timer);
+    const q = questions[currentIndex];
+    const isCorrect = selected.dataset.answer === q.dogruCevap;
+
+    ui.options.forEach(opt => {
+      opt.classList.add('disabled');
+      opt.style.pointerEvents = 'none';
+      if (opt.dataset.answer === q.dogruCevap) opt.classList.add('correct');
+      if (opt === selected && !isCorrect) opt.classList.add('wrong');
+    });
+
+    if (isCorrect) score += mode === 'hizli' ? 20 : 10;
+    ui.score.textContent = `Skor: ${score}`;
+    ui.nextBtn.style.display = 'block';
+  };
+
+  const handleTimeout = () => {
+    clearInterval(timer);
+    ui.options.forEach(opt => {
+      opt.classList.add('disabled');
+      opt.style.pointerEvents = 'none';
+      if (opt.dataset.answer === questions[currentIndex].dogruCevap) opt.classList.add('correct');
+    });
+    ui.nextBtn.style.display = 'block';
+  };
+
+  const nextQuestion = () => {
+    currentIndex++;
+    renderQuestion();
+  };
+
+  const endQuiz = () => {
+    if (timer) clearInterval(timer);
+    ui.container.style.display = 'none';
+    ui.endScreen.style.display = 'block';
+    ui.finalScore.textContent = `Toplam Skor: ${score}`;
+
+    // Veriyi kaydet
+    const username = Auth.getCurrentUser() || 'Misafir';
+    Store.addScore(category, score, mode, new Date().toISOString());
+    updateGlobalLeaderboard(username, score);
+  };
+
+  const updateGlobalLeaderboard = (username, finalScore) => {
+    let board = Store.getLeaderboard();
+    board.push({ name: username, category, score: finalScore, mode, date: new Date().toISOString() });
+    board.sort((a, b) => b.score - a.score);
+    board = board.slice(0, 50); // En yüksek 50 skor tutulur
+    Store.saveLeaderboard(board);
+  };
+
+  // Fisher-Yates Shuffle (tarafsız karıştırma)
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
+  return { init };
+})();
+
+document.addEventListener('DOMContentLoaded', Quiz.init);

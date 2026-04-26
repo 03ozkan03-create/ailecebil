@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AileceBil - Liderlik</title><link rel="stylesheet" href="css/style.css"></head><body>
+<div class="container">
+  <h1>🏆 Liderlik Tablosu</h1>
+  <div class="filters">
+    <select id="filter-cat"><option value="all">Tüm Kategoriler</option></select>
+    <select id="filter-mode"><option value="all">Tüm Modlar</option></select>
+    <button id="btn-clear" class="btn danger">Skorları Temizle</button>
+  </div>
+  <table><thead><tr><th>Sıra</th><th>Oyuncu</th><th>Kategori</th><th>Mod</th><th>Skor</th><th>Tarih</th></tr></thead><tbody id="lb-body"></tbody></table>
+  <button onclick="window.location.href='index.html'" class="btn secondary" style="margin-top:16px;">← Ana Menü</button>
+</div>
+<script src="js/store.js"></script><script src="js/ui.js"></script>
+<script>
+const board = Store.getLeaderboard(); const tbody = document.getElementById('lb-body');
+const fCat = document.getElementById('filter-cat'), fMode = document.getElementById('filter-mode');
+[...new Set(board.map(s=>s.category))].forEach(c=>fCat.innerHTML+=`<option value="${c}">${c}</option>`);
+[...new Set(board.map(s=>s.mode))].forEach(m=>fMode.innerHTML+=`<option value="${m}">${m}</option>`);
+const render = () => {
+  const filtered = board.filter(s => (fCat.value==='all'||s.category===fCat.value) && (fMode.value==='all'||s.mode===fMode.value));
+  tbody.innerHTML = filtered.length ? filtered.map((s,i)=>`<tr><td>${i+1}</td><td>${s.name||'Misafir'}</td><td>${s.category}</td><td>${s.mode}</td><td><strong>${s.score}</strong></td><td>${UI.formatDate(s.date)}</td></tr>`).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">Henüz skor yok.</td></tr>';
+};
+fCat.addEventListener('change',render); fMode.addEventListener('change',render);
+document.getElementById('btn-clear').addEventListener('click',()=>{if(confirm('Tüm skorlar silinsin mi?')){Store.saveLeaderboard([]);render();UI.showToast('Skorlar temizlendi.')}});
+render();
+</script></body></html>

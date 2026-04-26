@@ -1,0 +1,49 @@
+// js/store.js
+const Store = (() => {
+  const NAMESPACE = 'ailecebil_';
+
+  // Güvenli okuma
+  const get = (key, fallback = null) => {
+    try {
+      const raw = localStorage.getItem(NAMESPACE + key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  // Güvenli yazma
+  const set = (key, value) => {
+    try {
+      localStorage.setItem(NAMESPACE + key, JSON.stringify(value));
+      return true;
+    } catch (e) {
+      console.warn('localStorage hatası:', e);
+      return false;
+    }
+  };
+
+  // Kullanıcı profili
+  const getProfile = () => get('user', { name: '', role: 'user', scores: [] });
+  const saveProfile = (profile) => set('user', profile);
+
+  // Skor kaydetme (sıralama için)
+  const addScore = (category, score, mode, date) => {
+    const profile = getProfile();
+    profile.scores.push({ category, score, mode, date, id: Date.now() });
+    saveProfile(profile);
+  };
+
+  // Sıralama verisi (tüm kullanıcılar için ortak alanda)
+  const getLeaderboard = () => get('leaderboard', []);
+  const saveLeaderboard = (data) => set('leaderboard', data);
+
+  // Temizlik (admin/debug için)
+  const reset = () => {
+    Object.keys(localStorage)
+      .filter(k => k.startsWith(NAMESPACE))
+      .forEach(k => localStorage.removeItem(k));
+  };
+
+  return { get, set, getProfile, saveProfile, addScore, getLeaderboard, saveLeaderboard, reset };
+})();

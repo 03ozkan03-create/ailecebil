@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AileceBil - Giriş</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>👨‍👩‍👧‍👦 AileceBil</h1>
+    
+    <div id="auth-form">
+      <input type="text" id="username" placeholder="Kullanıcı adı" autocomplete="username">
+      <input type="password" id="password" placeholder="Şifre" autocomplete="current-password">
+      <input type="text" id="fullname" placeholder="Adınız (kayıt için)" style="display:none;">
+      
+      <button id="btn-login">Giriş Yap</button>
+      <button id="btn-register">Kayıt Ol</button>
+      <p id="auth-msg"></p>
+    </div>
+
+    <div id="mode-select" style="display:none;">
+      <h2>Oyun Modu Seç</h2>
+      <button class="mode-btn" data-mode="normal">📚 Normal</button>
+      <button class="mode-btn" data-mode="hizli">⚡ Hızlı</button>
+      <button class="mode-btn" data-mode="maraton">🏃 Maraton</button>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // UI Mantığı
+    const authMsg = document.getElementById('auth-msg');
+    const btnLogin = document.getElementById('btn-login');
+    const btnRegister = document.getElementById('btn-register');
+    const modeSelect = document.getElementById('mode-select');
+    const authForm = document.getElementById('auth-form');
+
+    // Kayıt modu geçişi
+    document.getElementById('btn-register').addEventListener('click', () => {
+      document.getElementById('fullname').style.display = 'block';
+      authMsg.textContent = '';
+    });
+
+    btnLogin.addEventListener('click', () => {
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value;
+      const res = Auth.login(u, p);
+      authMsg.textContent = res.msg || '';
+      if (res.success) {
+        authForm.style.display = 'none';
+        modeSelect.style.display = 'block';
+      }
+    });
+
+    document.getElementById('btn-register').addEventListener('click', () => {
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value;
+      const n = document.getElementById('fullname').value.trim();
+      const res = Auth.register(u, p, n);
+      authMsg.textContent = res.msg;
+    });
+
+    // Mod seçimi → oyun.html yönlendirme
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+        window.location.href = `oyun.html?mod=${mode}`;
+      });
+    });
+
+    // Zaten giriş yapmışsa direkt mod seçimi göster
+    if (Auth.getCurrentUser()) {
+      authForm.style.display = 'none';
+      modeSelect.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
